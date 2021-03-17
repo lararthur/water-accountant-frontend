@@ -4,6 +4,12 @@ import styles from '../styles/home.module.scss';
 export default function Home() {
   const [isLoginForm, setisLoginForm] = useState(true);
 
+  const keyDownInteraction = (e, status) => {
+    if (e.key === 'Enter') {
+      setisLoginForm(status);
+    }
+  };
+
   return (
     <div className={`${styles.homeContainer} wrapper`}>
       <h1 className={styles.logo}>
@@ -18,7 +24,7 @@ export default function Home() {
             type="radio"
             id="login"
             name="formType"
-            defaultChecked={isLoginForm}
+            checked={isLoginForm}
             value={1}
             onChange={() => setisLoginForm(true)}
           />
@@ -29,7 +35,7 @@ export default function Home() {
             type="radio"
             id="register"
             name="formType"
-            defaultChecked={!isLoginForm}
+            checked={!isLoginForm}
             value={0}
             onChange={() => setisLoginForm(false)}
           />
@@ -37,13 +43,25 @@ export default function Home() {
 
         <div className="switch">
           <div className="switch__wrapper">
-            <div className="switch__button switch__button--selected">
+            <div
+              className="switch__button switch__button--selected"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => keyDownInteraction(e, true)}
+              onClick={() => setisLoginForm(true)}
+            >
               Login
             </div>
-            <div className="switch__button">
+            <div
+              className="switch__button"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => keyDownInteraction(e, false)}
+              onClick={() => setisLoginForm(false)}
+            >
               Register
             </div>
-            <div className="switch__selection" />
+            <div className="switch__selection" style={{ right: 0 }} />
           </div>
         </div>
       </form>

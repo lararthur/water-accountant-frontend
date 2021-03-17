@@ -1,29 +1,51 @@
 import React, { useState } from 'react';
+import styles from '../styles/home.module.scss';
 
 export default function Home() {
   const [isLoginForm, setisLoginForm] = useState(true);
 
   return (
-    <div>
-      <h1>Water Accountant</h1>
+    <div className={`${styles.homeContainer} wrapper`}>
+      <h1 className={styles.logo}>
+        <span className={styles.logo__largerWord}>Water</span>
+        Accountant
+      </h1>
 
-      <form>
-        <input
-          type="radio"
-          id="login"
-          name="formType"
-          defaultChecked={isLoginForm}
-          value={1}
-          onChange={() => setisLoginForm(true)}
-        />
-        <input
-          type="radio"
-          id="register"
-          name="formType"
-          defaultChecked={!isLoginForm}
-          value={0}
-          onChange={() => setisLoginForm(false)}
-        />
+      <form className="form">
+        <label htmlFor="login">
+          Login
+          <input
+            type="radio"
+            id="login"
+            name="formType"
+            defaultChecked={isLoginForm}
+            value={1}
+            onChange={() => setisLoginForm(true)}
+          />
+        </label>
+        <label htmlFor="register">
+          Register
+          <input
+            type="radio"
+            id="register"
+            name="formType"
+            defaultChecked={!isLoginForm}
+            value={0}
+            onChange={() => setisLoginForm(false)}
+          />
+        </label>
+
+        <div className="switch">
+          <div className="switch__wrapper">
+            <div className="switch__button switch__button--selected">
+              Login
+            </div>
+            <div className="switch__button">
+              Register
+            </div>
+            <div className="switch__selection" />
+          </div>
+        </div>
       </form>
 
       {isLoginForm ? (

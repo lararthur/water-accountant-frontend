@@ -21,5 +21,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "no-use-before-define": "off", // this bypasses the "'React' was used before it was defined" error
+        "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }] // fixes "JSX not allowed in files with extension '.tsx'" error
     }
 }

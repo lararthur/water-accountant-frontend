@@ -28,5 +28,7 @@
     bottom: 0;
     border-radius: 5px;
     background: $blue;
+    color: $white;
+    transition: left 0.5s ease, right 0.5s ease;
   }
 }

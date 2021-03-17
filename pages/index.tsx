@@ -3,10 +3,20 @@ import styles from '../styles/home.module.scss';
 
 export default function Home() {
   const [isLoginForm, setisLoginForm] = useState(true);
+  const [selectedSwitchName, setSelectedSwitchName] = useState('Login');
+  const [selectedSwitchNamePosition, setSelectedSwitchNamePosition] = useState({ left: 0 });
 
-  const keyDownInteraction = (e, status) => {
-    if (e.key === 'Enter') {
+  const radioChange = (e, status, position, keyDownInteraction?) => {
+    if (keyDownInteraction) {
+      if (e.key === 'Enter') {
+        setisLoginForm(status);
+        setSelectedSwitchName(e.target.innerText);
+        setSelectedSwitchNamePosition(position);
+      }
+    } else {
       setisLoginForm(status);
+      setSelectedSwitchName(e.target.innerText);
+      setSelectedSwitchNamePosition(position);
     }
   };
 
@@ -26,7 +36,7 @@ export default function Home() {
             name="formType"
             checked={isLoginForm}
             value={1}
-            onChange={() => setisLoginForm(true)}
+            onChange={(e) => radioChange(e, true, { left: 0 })}
           />
         </label>
         <label htmlFor="register">
@@ -37,7 +47,7 @@ export default function Home() {
             name="formType"
             checked={!isLoginForm}
             value={0}
-            onChange={() => setisLoginForm(false)}
+            onChange={(e) => radioChange(e, false, { left: '50%' })}
           />
         </label>
 
@@ -47,8 +57,8 @@ export default function Home() {
               className="switch__button switch__button--selected"
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => keyDownInteraction(e, true)}
-              onClick={() => setisLoginForm(true)}
+              onKeyDown={(e) => radioChange(e, true, { left: 0 }, true)}
+              onClick={(e) => radioChange(e, true, { left: 0 })}
             >
               Login
             </div>
@@ -56,12 +66,14 @@ export default function Home() {
               className="switch__button"
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => keyDownInteraction(e, false)}
-              onClick={() => setisLoginForm(false)}
+              onKeyDown={(e) => radioChange(e, false, { left: '50%' }, true)}
+              onClick={(e) => radioChange(e, false, { left: '50%' })}
             >
               Register
             </div>
-            <div className="switch__selection" style={{ right: 0 }} />
+            <div className="switch__selection" style={selectedSwitchNamePosition}>
+              {selectedSwitchName}
+            </div>
           </div>
         </div>
       </form>

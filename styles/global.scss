@@ -6,6 +6,7 @@
 
 .wrapper {
   padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .form {
@@ -30,6 +31,10 @@
   padding: 0.5rem 1rem;
   border-radius: 10px;
   font-family: 'Questrial', sans-serif;
+  transition: border 0.7s ease;
+  &:focus {
+    border-color: $lightblue;
+  }
 }
 .button {
   background: $blue;

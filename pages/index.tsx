@@ -2,21 +2,52 @@ import React, { useState } from 'react';
 import styles from '../styles/home.module.scss';
 
 export default function Home() {
-  const [isLoginForm, setisLoginForm] = useState(true);
-  const [selectedSwitchName, setSelectedSwitchName] = useState('Login');
-  const [selectedSwitchNamePosition, setSelectedSwitchNamePosition] = useState({ left: 0 });
+  const defaultSwitchObjArr = [{
+    identifier: 'Login',
+    checked: true,
+  }, {
+    identifier: 'Register',
+    checked: false,
+  }];
+  const relatedSwitch = 'formType';
 
-  const radioChange = (e, status, position, keyDownInteraction?) => {
-    if (keyDownInteraction) {
+  const [switchObjArr, setSwitchObjArr] = useState(defaultSwitchObjArr);
+  const [checkedIdentifier, setcheckedIdentifier] = useState('Login');
+
+  const radioChange = (identifier) => {
+    let indexToTrue = 0;
+    let indexToFalse = 0;
+
+    const toTrue = switchObjArr.find((item, index) => {
+      const equality = item.identifier === identifier;
+      if (equality) {
+        indexToTrue = index;
+      }
+      return equality;
+    });
+    const toFalse = switchObjArr.find((item, index) => {
+      const equality = item.identifier === identifier;
+      if (!equality) {
+        indexToFalse = index;
+      }
+      return !equality;
+    });
+
+    const newSwitchObjArr = [];
+    newSwitchObjArr[indexToTrue] = { ...toTrue, checked: true };
+    newSwitchObjArr[indexToFalse] = { ...toFalse, checked: false };
+
+    setSwitchObjArr(newSwitchObjArr);
+    setcheckedIdentifier(toTrue.identifier);
+  };
+
+  const radioChangeHandler = (e, identifier) => {
+    if (e.type === 'keydown') {
       if (e.key === 'Enter') {
-        setisLoginForm(status);
-        setSelectedSwitchName(e.target.innerText);
-        setSelectedSwitchNamePosition(position);
+        radioChange(identifier);
       }
     } else {
-      setisLoginForm(status);
-      setSelectedSwitchName(e.target.innerText);
-      setSelectedSwitchNamePosition(position);
+      radioChange(identifier);
     }
   };
 
@@ -28,57 +59,53 @@ export default function Home() {
       </h1>
 
       <form className="form">
-        <label htmlFor="login">
-          Login
-          <input
-            type="radio"
-            id="login"
-            name="formType"
-            checked={isLoginForm}
-            value={1}
-            onChange={(e) => radioChange(e, true, { left: 0 })}
-          />
-        </label>
-        <label htmlFor="register">
-          Register
-          <input
-            type="radio"
-            id="register"
-            name="formType"
-            checked={!isLoginForm}
-            value={0}
-            onChange={(e) => radioChange(e, false, { left: '50%' })}
-          />
-        </label>
+
+        {switchObjArr.map((switchRadioItem) => {
+          const formatedIdentifier = switchRadioItem.identifier.replace(/\s/g, '');
+          return (
+            <label
+              key={`radio-${formatedIdentifier}`}
+              htmlFor={formatedIdentifier}
+            >
+              {switchRadioItem.identifier}
+              <input
+                type="radio"
+                id={formatedIdentifier}
+                name={relatedSwitch}
+                checked={switchRadioItem.checked}
+                value={formatedIdentifier}
+                onChange={(e) => radioChangeHandler(e, switchRadioItem.identifier)}
+              />
+            </label>
+          );
+        })}
 
         <div className="switch">
           <div className="switch__wrapper">
-            <div
-              className="switch__button switch__button--selected"
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => radioChange(e, true, { left: 0 }, true)}
-              onClick={(e) => radioChange(e, true, { left: 0 })}
-            >
-              Login
-            </div>
-            <div
-              className="switch__button"
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => radioChange(e, false, { left: '50%' }, true)}
-              onClick={(e) => radioChange(e, false, { left: '50%' })}
-            >
-              Register
-            </div>
-            <div className="switch__selection" style={selectedSwitchNamePosition}>
-              {selectedSwitchName}
+            {switchObjArr.map((switchItem) => {
+              const formatedIdentifier = switchItem.identifier.replace(/\s/g, '');
+              return (
+                <div
+                  key={`switch-${formatedIdentifier}`}
+                  className={`switch__button ${switchItem.checked && 'switch__button--selected'}`}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => radioChangeHandler(e, switchItem.identifier)}
+                  onClick={(e) => radioChangeHandler(e, switchItem.identifier)}
+                >
+                  {switchItem.identifier}
+                </div>
+              );
+            })}
+            <div className="switch__selection" style={{ left: (switchObjArr[0].checked) ? '0' : '50%' }}>
+              {checkedIdentifier}
             </div>
           </div>
         </div>
+
       </form>
 
-      {isLoginForm ? (
+      {checkedIdentifier === 'Login' ? (
         <form>
           <label htmlFor="email">
             E-mail

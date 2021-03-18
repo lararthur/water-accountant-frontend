@@ -61,11 +61,12 @@ export default function Home() {
       <form className="form">
 
         {switchObjArr.map((switchRadioItem) => {
-          const formatedIdentifier = switchRadioItem.identifier.replace(/\s/g, '');
+          const formatedIdentifier = switchRadioItem.identifier.replace(/\s/g, '').toLocaleLowerCase();
           return (
             <label
               key={`radio-${formatedIdentifier}`}
               htmlFor={formatedIdentifier}
+              className="hidden"
             >
               {switchRadioItem.identifier}
               <input
@@ -83,7 +84,7 @@ export default function Home() {
         <div className="switch">
           <div className="switch__wrapper">
             {switchObjArr.map((switchItem) => {
-              const formatedIdentifier = switchItem.identifier.replace(/\s/g, '');
+              const formatedIdentifier = switchItem.identifier.replace(/\s/g, '').toLocaleLowerCase();
               return (
                 <div
                   key={`switch-${formatedIdentifier}`}
@@ -103,39 +104,46 @@ export default function Home() {
           </div>
         </div>
 
+        {checkedIdentifier === 'Login' ? (
+          <>
+            <label htmlFor="email" className="label">
+              <span className="label__text">E-mail</span>
+              <input type="email" id="email" className="input" />
+            </label>
+            <label htmlFor="password" className="label">
+              <span className="label__text">Password</span>
+              <input type="password" id="password" className="input" />
+            </label>
+
+            <input
+              className="button"
+              type="button"
+              value="Login"
+            />
+          </>
+        ) : (
+          <>
+            <label htmlFor="email" className="label">
+              <span className="label__text">E-mail</span>
+              <input type="email" id="email" className="input" />
+            </label>
+            <label htmlFor="password" className="label">
+              <span className="label__text">Password</span>
+              <input type="password" id="password" className="input" />
+            </label>
+            <label htmlFor="confirm-password" className="label">
+              <span className="label__text">Confirm Password</span>
+              <input type="password" id="confirm-password" className="input" />
+            </label>
+
+            <input
+              className="button"
+              type="button"
+              value="Register"
+            />
+          </>
+        )}
       </form>
-
-      {checkedIdentifier === 'Login' ? (
-        <form>
-          <label htmlFor="email">
-            E-mail
-            <input type="email" id="email" />
-          </label>
-          <label htmlFor="password">
-            Password
-            <input type="password" id="password" />
-          </label>
-
-          <input type="button" value="Login" />
-        </form>
-      ) : (
-        <form>
-          <label htmlFor="email">
-            E-mail
-            <input type="email" id="email" />
-          </label>
-          <label htmlFor="password">
-            Password
-            <input type="password" id="password" />
-          </label>
-          <label htmlFor="confirm-password">
-            Confirm Password
-            <input type="password" id="confirm-password" />
-          </label>
-
-          <input type="button" value="Register" />
-        </form>
-      )}
 
     </div>
   );

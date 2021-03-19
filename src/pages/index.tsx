@@ -38,7 +38,6 @@ const Home = () => {
       <form className="form">
 
         <SwitchComponent
-          defaultSwitchObjArr={defaultSwitchObjArr}
           relatedSwitch={relatedSwitch}
           switchObjArr={switchObjArr}
           setSwitchObjArr={setSwitchObjArr}

@@ -25,29 +25,18 @@ const SwitchComponent = (
   const [checkedIdentifier, setcheckedIdentifier] = useState(checkedObj.identifier);
 
   const radioChange = (identifier) => {
-    let indexToTrue = 0;
-    let indexToFalse = 0;
+    if (identifier === checkedIdentifier) {
+      return;
+    }
 
-    const toTrue = switchObjArr.find((item, index) => {
-      const equality = item.identifier === identifier;
-      if (equality) {
-        indexToTrue = index;
-      }
-      return equality;
-    });
-    const toFalse = switchObjArr.find((item, index) => {
-      const equality = item.identifier === identifier;
-      if (!equality) {
-        indexToFalse = index;
-      }
-      return !equality;
-    });
+    const newSwitchObjArr: switchObjArrType = [
+      { ...switchObjArr[0], checked: !switchObjArr[0].checked },
+      { ...switchObjArr[1], checked: !switchObjArr[1].checked },
+    ];
 
-    const newSwitchObjArr: switchObjArrType = switchObjArr;
-    newSwitchObjArr[indexToTrue] = { ...toTrue, checked: true };
-    newSwitchObjArr[indexToFalse] = { ...toFalse, checked: false };
+    const newCheckedIdentifier = newSwitchObjArr.find((item) => item.checked);
 
-    setcheckedIdentifier(toTrue.identifier);
+    setcheckedIdentifier(newCheckedIdentifier.identifier);
 
     subscriber(newSwitchObjArr);
   };

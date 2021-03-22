@@ -28,6 +28,10 @@ const Home = () => {
 
   const [switchObjArr, setSwitchObjArr] = useState(defaultSwitchObjArr);
 
+  const subscriber = (newSwitchObjArr) => {
+    setSwitchObjArr(newSwitchObjArr);
+  };
+
   return (
     <div className={`${styles.homeContainer} wrapper`}>
       <h1 className={styles.logo}>
@@ -40,7 +44,7 @@ const Home = () => {
         <SwitchComponent
           relatedSwitch={relatedSwitch}
           switchObjArr={switchObjArr}
-          setSwitchObjArr={setSwitchObjArr}
+          subscriber={subscriber}
         />
 
         {switchObjArr[0].checked ? (

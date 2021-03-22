@@ -13,12 +13,12 @@ type switchObjArrType = [
 interface SwitchComponentProps {
   relatedSwitch: string;
   switchObjArr;
-  setSwitchObjArr;
+  subscriber;
 }
 
 const SwitchComponent = (
   {
-    relatedSwitch, switchObjArr, setSwitchObjArr,
+    relatedSwitch, switchObjArr, subscriber,
   }: SwitchComponentProps,
 ) => {
   const checkedObj = switchObjArr.find((item) => item.checked);
@@ -47,8 +47,9 @@ const SwitchComponent = (
     newSwitchObjArr[indexToTrue] = { ...toTrue, checked: true };
     newSwitchObjArr[indexToFalse] = { ...toFalse, checked: false };
 
-    setSwitchObjArr(newSwitchObjArr);
     setcheckedIdentifier(toTrue.identifier);
+
+    subscriber(newSwitchObjArr);
   };
 
   const radioChangeHandler = (e, identifier) => {

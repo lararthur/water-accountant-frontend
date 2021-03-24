@@ -20,7 +20,7 @@ const SwitchComponent = (
   {
     relatedSwitch, switchObjArr, subscriber,
   }: SwitchComponentProps,
-) => {
+): JSX.Element => {
   const checkedObj = switchObjArr.find((item) => item.checked);
   const [checkedIdentifier, setcheckedIdentifier] = useState(checkedObj.identifier);
 

@@ -5,12 +5,12 @@ import Head from 'next/head';
 import { UsersProvider } from '../contexts/UsersContext';
 
 interface MyAppProps {
-  Component: () => any;
-  pageProps: {};
+  Component;
+  pageProps;
 }
 
 // This default export is required in a new `pages/_app.js` file.
-export default function MyApp({ Component, pageProps }: MyAppProps) {
+export default function MyApp({ Component, pageProps }: MyAppProps): JSX.Element {
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <UsersProvider>

@@ -14,7 +14,7 @@ type switchObjArrType = [
   },
 ];
 
-const Home = () => {
+const Home = (): JSX.Element => {
   const { registerUser } = useContext(UsersContext);
 
   const defaultSwitchObjArr: switchObjArrType = [

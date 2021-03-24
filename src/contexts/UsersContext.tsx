@@ -1,9 +1,23 @@
-import React, { createContext, useState } from 'react';
+import React, { ReactNode, createContext, useState } from 'react';
 import Cookies from 'js-cookie';
 
-export const UsersContext = createContext({});
+interface RegisterUserParams {
+  email: string;
+  password: string;
+}
 
-export function UsersProvider({ children }) {
+interface UsersContextData {
+  users: [];
+  registerUser: (myParams: RegisterUserParams) => void;
+}
+
+interface UsersProviderProps {
+  children: ReactNode;
+}
+
+export const UsersContext = createContext({} as UsersContextData);
+
+export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
   /* const defaultUsers = [
     {
       email: 'arthur.lara.negocios.01@gmail.com',

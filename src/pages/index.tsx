@@ -72,7 +72,7 @@ const Home = (): JSX.Element => {
   };
 
   return (
-    <div className={`${styles.homeContainer} wrapper`}>
+    <section className={`${styles.homeContainer} wrapper wrapper--fullHeight wrapper--greyBg`}>
       <h1 className={styles.logo}>
         <span className={styles.logo__largerWord}>Water</span>
         Accountant
@@ -181,7 +181,7 @@ const Home = (): JSX.Element => {
         )}
       </form>
 
-    </div>
+    </section>
   );
 };
 

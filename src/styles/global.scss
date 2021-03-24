@@ -7,6 +7,19 @@
 .wrapper {
   padding: 0 1rem;
   box-sizing: border-box;
+  &--fullHeight {
+    height: 100vh;
+  }
+  &--greyBg {
+    background: $background;
+  }
+}
+
+.title {
+  color: $blue;
+  text-align: center;
+  font-size: 1.25rem;
+  padding-bottom: 1.5rem;
 }
 
 .form {

@@ -6,9 +6,18 @@ interface RegisterUserParams {
   password: string;
 }
 
+interface Users {
+  email: string;
+  password: string;
+  name: string | null,
+  weight: number | null,
+  weightMeasureUnit: 'kg' | 'lb' | null,
+  language: 'pt-BR' | 'en-US' | null,
+}
+
 interface UsersContextData {
-  users: [];
-  registerUser: (myParams: RegisterUserParams) => void;
+  users: Users[];
+  registerUser: (param: RegisterUserParams) => void;
 }
 
 interface UsersProviderProps {

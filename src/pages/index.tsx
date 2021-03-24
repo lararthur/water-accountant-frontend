@@ -31,12 +31,15 @@ const Home = (): JSX.Element => {
 
   const [switchObjArr, setSwitchObjArr] = useState(defaultSwitchObjArr);
 
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const subscriber = (newSwitchObjArr) => {
     setSwitchObjArr(newSwitchObjArr);
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
   };
 
   const handleRegister = () => {
@@ -96,6 +99,7 @@ const Home = (): JSX.Element => {
                 id="email"
                 className="input"
                 onChange={(e) => handleField(e)}
+                value={email}
               />
             </label>
 
@@ -110,6 +114,7 @@ const Home = (): JSX.Element => {
                 id="password"
                 className="input"
                 onChange={(e) => handleField(e)}
+                value={password}
               />
             </label>
 
@@ -132,6 +137,7 @@ const Home = (): JSX.Element => {
                 id="email"
                 className="input"
                 onChange={(e) => handleField(e)}
+                value={email}
               />
             </label>
 
@@ -146,6 +152,7 @@ const Home = (): JSX.Element => {
                 id="password"
                 className="input"
                 onChange={(e) => handleField(e)}
+                value={password}
               />
             </label>
 
@@ -160,6 +167,7 @@ const Home = (): JSX.Element => {
                 id="confirm-password"
                 className="input"
                 onChange={(e) => handleField(e)}
+                value={confirmPassword}
               />
             </label>
 

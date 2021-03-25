@@ -113,6 +113,11 @@ body {
   background-color: #040c1c;
 }
 
+section {
+  width: 100%;
+  box-sizing: content-box;
+}
+
 ol,
 ul {
   list-style: none;

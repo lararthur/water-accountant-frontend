@@ -35,7 +35,7 @@ const Home = (): JSX.Element => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const loginRegisterSwitchSubscriber = (newSwitchObjArr) => {
+  const switchSubscriber = (newSwitchObjArr) => {
     setSwitchObjArr(newSwitchObjArr);
     setEmail('');
     setPassword('');
@@ -83,7 +83,7 @@ const Home = (): JSX.Element => {
         <SwitchComponent
           relatedSwitch={relatedSwitch}
           switchObjArr={switchObjArr}
-          switchSubscriber={loginRegisterSwitchSubscriber}
+          switchSubscriber={switchSubscriber}
         />
 
         {switchObjArr[0].checked ? (

@@ -31,7 +31,6 @@
   font-size: 0.875rem;
   display: flex;
   flex-direction: column;
-  padding-bottom: 1rem;
   &__text {
     padding-bottom: 0.5rem;
     line-height: 1;
@@ -42,6 +41,7 @@
   border: 1px solid $grey;
   font-size: 1rem;
   padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
   border-radius: 10px;
   font-family: 'Questrial', sans-serif;
   transition: border 0.7s ease;
@@ -84,5 +84,14 @@
     background: $blue;
     color: $white;
     transition: left 0.5s ease, right 0.5s ease;
+  }
+}
+
+.inputGroup {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 8px;
+  .switch {
+    justify-content: end;
   }
 }

@@ -28,8 +28,31 @@ export default function basicInfoPage(): JSX.Element {
 
   const [switchObjArr, setSwitchObjArr] = useState(defaultSwitchObjArr);
 
+  const [name, setName] = useState('');
+  const [weight, setWeight] = useState(null);
+  const [weightMeasureUnit, setWeightMeasureUnit] = useState('lb');
+  const [language, setLanguage] = useState('en-US');
+
   const switchSubscriber = (newSwitchObjArr) => {
+    console.log('newSwitchObjArr', newSwitchObjArr);
+    const selectedObj = newSwitchObjArr.find((item) => item.checked);
+
+    setWeightMeasureUnit(selectedObj.identifier.toLocaleLowerCase());
     setSwitchObjArr(newSwitchObjArr);
+  };
+
+  const handleField = (e) => {
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+    if (fieldName === 'name') {
+      setName(fieldValue);
+    }
+    if (fieldName === 'weight') {
+      setWeight(fieldValue);
+    }
+    if (fieldName === 'language') {
+      setLanguage(fieldValue);
+    }
   };
 
   return (
@@ -47,6 +70,8 @@ export default function basicInfoPage(): JSX.Element {
             name="name"
             id="name"
             className="input"
+            value={name}
+            onChange={(e) => handleField(e)}
           />
         </label>
 
@@ -61,10 +86,12 @@ export default function basicInfoPage(): JSX.Element {
               name="weight"
               id="weight"
               className="input"
+              value={weight || ''}
+              onChange={(e) => handleField(e)}
             />
           </label>
 
-          <p
+          <span
             className="label"
           >
             <span className="label__text">Weight measure unit</span>
@@ -73,7 +100,7 @@ export default function basicInfoPage(): JSX.Element {
               switchObjArr={switchObjArr}
               switchSubscriber={switchSubscriber}
             />
-          </p>
+          </span>
         </div>
 
         <label
@@ -85,6 +112,7 @@ export default function basicInfoPage(): JSX.Element {
             name="language"
             id="language"
             className="input"
+            onChange={(e) => handleField(e)}
           >
             <option value="en-US">English</option>
             <option value="pt-BR">Português</option>

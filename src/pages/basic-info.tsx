@@ -34,7 +34,6 @@ export default function basicInfoPage(): JSX.Element {
   const [language, setLanguage] = useState('en-US');
 
   const switchSubscriber = (newSwitchObjArr) => {
-    console.log('newSwitchObjArr', newSwitchObjArr);
     const selectedObj = newSwitchObjArr.find((item) => item.checked);
 
     setWeightMeasureUnit(selectedObj.identifier.toLocaleLowerCase());
@@ -48,7 +47,11 @@ export default function basicInfoPage(): JSX.Element {
       setName(fieldValue);
     }
     if (fieldName === 'weight') {
-      setWeight(fieldValue);
+      if (fieldValue < 0) {
+        setWeight(fieldValue * -1);
+      } else {
+        setWeight(fieldValue);
+      }
     }
     if (fieldName === 'language') {
       setLanguage(fieldValue);

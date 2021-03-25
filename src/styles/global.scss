@@ -31,9 +31,23 @@
   font-size: 0.875rem;
   display: flex;
   flex-direction: column;
+  position: relative;
   &__text {
     padding-bottom: 0.5rem;
     line-height: 1;
+  }
+
+  &--error {
+    .input {
+      border-color: $red;
+      margin-bottom: 0;
+      &:focus {
+        border-color: $red;
+      }
+    }
+    .tooltip {
+      display: block;
+    }
   }
 }
 .input {
@@ -50,6 +64,12 @@
     border-color: $lightblue;
   }
 }
+.tooltip {
+  display: none;
+  color: $red;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
 .button {
   background: $blue;
   color: $white;
@@ -61,7 +81,6 @@
   width: fit-content;
   margin: 0 auto;
 }
-
 .switch {
   width: 100%;
   display: flex;

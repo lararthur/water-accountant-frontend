@@ -90,7 +90,7 @@ const Home = (): JSX.Element => {
           <>
             <label
               htmlFor="email"
-              className="label"
+              className="label label--error"
             >
               <span className="label__text">E-mail</span>
               <input
@@ -101,11 +101,12 @@ const Home = (): JSX.Element => {
                 onChange={(e) => handleField(e)}
                 value={email}
               />
+              <span className="tooltip">Campo errado</span>
             </label>
 
             <label
               htmlFor="password"
-              className="label"
+              className="label label--error"
             >
               <span className="label__text">Password</span>
               <input
@@ -116,6 +117,7 @@ const Home = (): JSX.Element => {
                 onChange={(e) => handleField(e)}
                 value={password}
               />
+              <span className="tooltip">Campo errado</span>
             </label>
 
             <input
@@ -128,7 +130,7 @@ const Home = (): JSX.Element => {
           <>
             <label
               htmlFor="email"
-              className="label"
+              className="label label--error"
             >
               <span className="label__text">E-mail</span>
               <input
@@ -139,6 +141,7 @@ const Home = (): JSX.Element => {
                 onChange={(e) => handleField(e)}
                 value={email}
               />
+              <span className="tooltip">Campo errado</span>
             </label>
 
             <label

@@ -5,28 +5,31 @@ interface ValidationsProviderProps {
 }
 
 interface defaultObjProperties {
-  isValid: boolean;
+  isValid: boolean | null;
   message: string | null;
 }
 
 interface ValidationsContextData {
   emailObj: defaultObjProperties;
   passwordObj: defaultObjProperties;
+  confirmPasswordObj: defaultObjProperties;
   nameObj: defaultObjProperties;
   weightObj: defaultObjProperties;
   validateEmail: (email) => void;
   validatePassword: (password) => void;
   validateName: (name) => void;
   validateWeight: (weight) => void;
+  validatePasswordEquality: (password, confirmPassword) => void;
 }
 
 export const ValidationsContext = createContext({} as ValidationsContextData);
 
 export function ValidationsProvider({ children }: ValidationsProviderProps): JSX.Element {
-  const defaultObj: defaultObjProperties = { isValid: false, message: null };
+  const defaultObj: defaultObjProperties = { isValid: null, message: null };
 
   const [emailObj, setEmailObj] = useState(defaultObj);
   const [passwordObj, setPasswordObj] = useState(defaultObj);
+  const [confirmPasswordObj, setConfirmPasswordObj] = useState(defaultObj);
   const [nameObj, setNameObj] = useState(defaultObj);
   const [weightObj, setWeightObj] = useState(defaultObj);
 
@@ -128,7 +131,29 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
     setPasswordObj(newPasswordObj);
   };
 
-  const validateName = (name) => {
+  const validatePasswordEquality = (password, confirmPassword) => {
+    if (!confirmPassword) {
+      const newConfirmPasswordObj = {
+        isValid: false,
+        message: 'Confirm password is empty',
+      };
+      setConfirmPasswordObj(newConfirmPasswordObj);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      const newConfirmPasswordObj = {
+        isValid: false,
+        message: 'Password and Confirm Password fields must be the same',
+      };
+      setConfirmPasswordObj(newConfirmPasswordObj);
+      return;
+    }
+
+    setConfirmPasswordObj({ isValid: true, message: null });
+  };
+
+  const validateName = async (name) => {
     if (!name) {
       const newNameObj = {
         isValid: false,
@@ -191,12 +216,14 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
     <ValidationsContext.Provider value={{
       emailObj,
       passwordObj,
+      confirmPasswordObj,
       nameObj,
       weightObj,
       validateEmail,
       validatePassword,
       validateName,
       validateWeight,
+      validatePasswordEquality,
     }}
     >
       {children}

@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import SwitchComponent from '../components/common/SwitchComponent';
 import styles from '../styles/home.module.scss';
 import { UsersContext } from '../contexts/UsersContext';
+import { ValidationsContext } from '../contexts/ValidationsContext';
 
 type switchObjArrType = [
   {
@@ -16,6 +17,14 @@ type switchObjArrType = [
 
 const Home = (): JSX.Element => {
   const { registerUser } = useContext(UsersContext);
+  const {
+    emailObj,
+    passwordObj,
+    confirmPasswordObj,
+    validateEmail,
+    validatePassword,
+    validatePasswordEquality,
+  } = useContext(ValidationsContext);
 
   const defaultSwitchObjArr: switchObjArrType = [
     {
@@ -43,18 +52,15 @@ const Home = (): JSX.Element => {
   };
 
   const handleRegister = () => {
-    /*
-    @Todo:
-    -> still missing more consistent validations!
-    */
     // fields validations
-    if (password !== confirmPassword) {
-      console.log('not passwords are different');
-      return;
-    }
+    validateEmail(email);
+    validatePassword(password);
+    validatePasswordEquality(password, confirmPassword);
 
-    // send data to user registration
-    registerUser({ email, password });
+    if (emailObj.isValid && passwordObj.isValid && confirmPasswordObj.isValid) {
+      // send data to user registration
+      registerUser({ email, password });
+    }
   };
 
   const handleField = (e) => {
@@ -62,12 +68,15 @@ const Home = (): JSX.Element => {
     const fieldValue = e.target.value;
     if (fieldName === 'email') {
       setEmail(fieldValue);
+      validateEmail(fieldValue);
     }
     if (fieldName === 'password') {
       setPassword(fieldValue);
+      validatePassword(fieldValue);
     }
     if (fieldName === 'confirmPassword') {
       setConfirmPassword(fieldValue);
+      validatePasswordEquality(password, fieldValue);
     }
   };
 
@@ -130,7 +139,10 @@ const Home = (): JSX.Element => {
           <>
             <label
               htmlFor="email"
-              className="label label--error"
+              // i'm comapring (isValid === false) because the initial value is null...
+              // And it can become false only after validated...
+              // I only want to have the error class after validated.
+              className={`label ${(emailObj.isValid === false) && 'label--error'}`}
             >
               <span className="label__text">E-mail</span>
               <input
@@ -141,12 +153,15 @@ const Home = (): JSX.Element => {
                 onChange={(e) => handleField(e)}
                 value={email}
               />
-              <span className="tooltip">Campo errado</span>
+              <span className="tooltip">{emailObj.message}</span>
             </label>
 
             <label
               htmlFor="password"
-              className="label"
+              // i'm comapring (isValid === false) because the initial value is null...
+              // And it can become false only after validated...
+              // I only want to have the error class after validated.
+              className={`label ${(passwordObj.isValid === false) && 'label--error'}`}
             >
               <span className="label__text">Password</span>
               <input
@@ -157,11 +172,15 @@ const Home = (): JSX.Element => {
                 onChange={(e) => handleField(e)}
                 value={password}
               />
+              <span className="tooltip">{passwordObj.message}</span>
             </label>
 
             <label
               htmlFor="confirm-password"
-              className="label"
+              // i'm comapring (isValid === false) because the initial value is null...
+              // And it can become false only after validated...
+              // I only want to have the error class after validated.
+              className={`label ${(confirmPasswordObj.isValid === false) && 'label--error'}`}
             >
               <span className="label__text">Confirm Password</span>
               <input
@@ -172,6 +191,7 @@ const Home = (): JSX.Element => {
                 onChange={(e) => handleField(e)}
                 value={confirmPassword}
               />
+              <span className="tooltip">{confirmPasswordObj.message}</span>
             </label>
 
             <input

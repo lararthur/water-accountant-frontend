@@ -81,12 +81,14 @@ export default function basicInfoPage(): JSX.Element {
           className="label"
         >
           <span className="label__text">Language</span>
-          <input
-            type="text"
+          <select
             name="language"
             id="language"
             className="input"
-          />
+          >
+            <option value="en-US">English</option>
+            <option value="pt-BR">Português</option>
+          </select>
         </label>
 
         <input

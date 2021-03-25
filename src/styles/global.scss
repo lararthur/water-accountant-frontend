@@ -45,6 +45,7 @@
   border-radius: 10px;
   font-family: 'Questrial', sans-serif;
   transition: border 0.7s ease;
+  background: $white;
   &:focus {
     border-color: $lightblue;
   }

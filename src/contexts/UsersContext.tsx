@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import Cookies from 'js-cookie';
 import { LoggedUserContext } from './LoggedUserContext';
+import { ValidationsContext } from './ValidationsContext';
 
 interface UserParams {
   email: string;
@@ -40,8 +41,7 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
   const [users, setUsers] = useState(defaultUsers);
 
   const { login } = useContext(LoggedUserContext);
-
-  console.log('users', users);
+  const { setCustomErrorMessage } = useContext(ValidationsContext);
 
   const getUser = (email) => users.find((user) => user.email === email);
 
@@ -49,7 +49,7 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
     // validate if email already exists
     const userExists = getUser(email);
     if (userExists) {
-      console.log('user already registered');
+      setCustomErrorMessage('email', 'E-mail already registered');
       return;
     }
 
@@ -74,11 +74,11 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
   const loginUser = ({ email, password }) => {
     const userExists = getUser(email);
     if (!userExists) {
-      console.log('E-mail not registered');
+      setCustomErrorMessage('email', 'E-mail not registered');
       return;
     }
     if (password !== userExists.password) {
-      console.log('Incorrect password');
+      setCustomErrorMessage('password', 'Incorrect password');
       return;
     }
 

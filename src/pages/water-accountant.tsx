@@ -11,6 +11,10 @@ export default function WaterAccountant(): JSX.Element {
     router.push('/');
   }
 
+  if (process.browser && loggedUser && !loggedUser.name) {
+    router.push('/basic-info');
+  }
+
   return (
     <button type="button" onClick={logout}>Logout</button>
   );

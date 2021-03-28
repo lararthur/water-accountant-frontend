@@ -1,7 +1,13 @@
-import React, { ReactNode, createContext, useState } from 'react';
+import React, {
+  ReactNode,
+  createContext,
+  useState,
+  useContext,
+} from 'react';
 import Cookies from 'js-cookie';
+import { LoggedUserContext } from './LoggedUserContext';
 
-interface RegisterUserParams {
+interface UserParams {
   email: string;
   password: string;
 }
@@ -17,7 +23,8 @@ interface User {
 
 interface UsersContextData {
   users: User[];
-  registerUser: (param: RegisterUserParams) => void;
+  registerUser: (param: UserParams) => void;
+  loginUser: (param: UserParams) => void;
 }
 
 interface UsersProviderProps {
@@ -27,26 +34,20 @@ interface UsersProviderProps {
 export const UsersContext = createContext({} as UsersContextData);
 
 export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
-  /* const defaultUsers = [
-    {
-      email: 'arthur.lara.negocios.01@gmail.com',
-      password: '1597535',
-      name: 'Arthur Lara',
-      weight: 110,
-      weightMeasureUnit: 'kg',
-      language: 'pt-BR',
-    },
-  ]; */
   const usersSaved = Cookies.get('WaterAccountantUsers');
   const defaultUsers = usersSaved ? JSON.parse(usersSaved) : [];
 
   const [users, setUsers] = useState(defaultUsers);
 
+  const { login } = useContext(LoggedUserContext);
+
   console.log('users', users);
+
+  const getUser = (email) => users.find((user) => user.email === email);
 
   const registerUser = ({ email, password }) => {
     // validate if email already exists
-    const userExists = users.find((user) => user.email === email);
+    const userExists = getUser(email);
     if (userExists) {
       console.log('user already registered');
       return;
@@ -66,12 +67,29 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
 
     setUsers(newUsers);
     Cookies.set('WaterAccountantUsers', JSON.stringify(newUsers));
+
+    login(newUser);
+  };
+
+  const loginUser = ({ email, password }) => {
+    const userExists = getUser(email);
+    if (!userExists) {
+      console.log('E-mail not registered');
+      return;
+    }
+    if (password !== userExists.password) {
+      console.log('Incorrect password');
+      return;
+    }
+
+    login(userExists);
   };
 
   return (
     <UsersContext.Provider value={{
       users,
       registerUser,
+      loginUser,
     }}
     >
       {children}

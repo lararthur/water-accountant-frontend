@@ -20,6 +20,7 @@ interface ValidationsContextData {
   validateName: (name) => void;
   validateWeight: (weight) => void;
   validatePasswordEquality: (password, confirmPassword) => void;
+  resetValidations: () => void;
 }
 
 export const ValidationsContext = createContext({} as ValidationsContextData);
@@ -32,6 +33,14 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
   const [confirmPasswordObj, setConfirmPasswordObj] = useState(defaultObj);
   const [nameObj, setNameObj] = useState(defaultObj);
   const [weightObj, setWeightObj] = useState(defaultObj);
+
+  const resetValidations = () => {
+    setEmailObj(defaultObj);
+    setPasswordObj(defaultObj);
+    setConfirmPasswordObj(defaultObj);
+    setNameObj(defaultObj);
+    setWeightObj(defaultObj);
+  };
 
   const validateEmail = (email) => {
     if (!email) {
@@ -224,6 +233,7 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
       validateName,
       validateWeight,
       validatePasswordEquality,
+      resetValidations,
     }}
     >
       {children}

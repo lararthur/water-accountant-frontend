@@ -1,8 +1,10 @@
 import React, { useState, useContext } from 'react';
+import { useRouter } from 'next/router';
 import SwitchComponent from '../components/common/SwitchComponent';
 import styles from '../styles/home.module.scss';
 import { UsersContext } from '../contexts/UsersContext';
 import { ValidationsContext } from '../contexts/ValidationsContext';
+import { LoggedUserContext } from '../contexts/LoggedUserContext';
 
 type switchObjArrType = [
   {
@@ -16,7 +18,15 @@ type switchObjArrType = [
 ];
 
 const Home = (): JSX.Element => {
-  const { registerUser } = useContext(UsersContext);
+  const router = useRouter();
+
+  const { loggedUser } = useContext(LoggedUserContext);
+
+  if (process.browser && loggedUser) {
+    router.push('/water-accountant');
+  }
+
+  const { registerUser, loginUser } = useContext(UsersContext);
   const {
     emailObj,
     passwordObj,
@@ -24,6 +34,7 @@ const Home = (): JSX.Element => {
     validateEmail,
     validatePassword,
     validatePasswordEquality,
+    resetValidations,
   } = useContext(ValidationsContext);
 
   const defaultSwitchObjArr: switchObjArrType = [
@@ -49,6 +60,7 @@ const Home = (): JSX.Element => {
     setEmail('');
     setPassword('');
     setConfirmPassword('');
+    resetValidations();
   };
 
   const handleRegister = () => {
@@ -61,6 +73,10 @@ const Home = (): JSX.Element => {
       // send data to user registration
       registerUser({ email, password });
     }
+  };
+
+  const handleLogin = () => {
+    loginUser({ email, password });
   };
 
   const handleField = (e) => {
@@ -99,7 +115,10 @@ const Home = (): JSX.Element => {
           <>
             <label
               htmlFor="email"
-              className="label label--error"
+              // i'm comapring (isValid === false) because the initial value is null...
+              // And it can become false only after validated...
+              // I only want to have the error class after validated.
+              className={`label ${(emailObj.isValid === false) && 'label--error'}`}
             >
               <span className="label__text">E-mail</span>
               <input
@@ -110,12 +129,15 @@ const Home = (): JSX.Element => {
                 onChange={(e) => handleField(e)}
                 value={email}
               />
-              <span className="tooltip">Campo errado</span>
+              <span className="tooltip">{emailObj.message}</span>
             </label>
 
             <label
               htmlFor="password"
-              className="label label--error"
+              // i'm comapring (isValid === false) because the initial value is null...
+              // And it can become false only after validated...
+              // I only want to have the error class after validated.
+              className={`label ${(passwordObj.isValid === false) && 'label--error'}`}
             >
               <span className="label__text">Password</span>
               <input
@@ -126,13 +148,14 @@ const Home = (): JSX.Element => {
                 onChange={(e) => handleField(e)}
                 value={password}
               />
-              <span className="tooltip">Campo errado</span>
+              <span className="tooltip">{passwordObj.message}</span>
             </label>
 
             <input
               className="button"
               type="button"
               value="Login"
+              onClick={handleLogin}
             />
           </>
         ) : (

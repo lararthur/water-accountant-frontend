@@ -6,7 +6,7 @@ interface RegisterUserParams {
   password: string;
 }
 
-interface Users {
+interface User {
   email: string;
   password: string;
   name: string | null,
@@ -16,7 +16,7 @@ interface Users {
 }
 
 interface UsersContextData {
-  users: Users[];
+  users: User[];
   registerUser: (param: RegisterUserParams) => void;
 }
 
@@ -65,7 +65,6 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
     const newUsers = [...users, newUser];
 
     setUsers(newUsers);
-
     Cookies.set('WaterAccountantUsers', JSON.stringify(newUsers));
   };
 

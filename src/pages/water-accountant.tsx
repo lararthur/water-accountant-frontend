@@ -5,13 +5,13 @@ import { LoggedUserContext } from '../contexts/LoggedUserContext';
 export default function WaterAccountant(): JSX.Element {
   const router = useRouter();
 
-  const { loggedUser } = useContext(LoggedUserContext);
+  const { loggedUser, logout } = useContext(LoggedUserContext);
 
   if (process.browser && !loggedUser) {
     router.push('/');
   }
 
   return (
-    <h1>Water Accountant</h1>
+    <button type="button" onClick={logout}>Logout</button>
   );
 }

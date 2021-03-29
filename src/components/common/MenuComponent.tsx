@@ -2,6 +2,12 @@ import React from 'react';
 import styles from '../../styles/menu.module.scss';
 
 export default function MenuComponent(): JSX.Element {
+  const checkMenuPosition = (e) => {
+    console.log(e);
+    // const chagesOn = (scrollWidth / 2) - (offsetWidth / 4)
+    // if scrollLeft <= chagesOn ? closeMenu() : openMenu()
+  };
+
   return (
     <>
       <section className={styles.menuBar}>
@@ -14,7 +20,7 @@ export default function MenuComponent(): JSX.Element {
         </div>
       </section>
 
-      <section className={styles.menuBackground}>
+      <section onScroll={(e) => checkMenuPosition(e)} className={styles.menuBackground}>
         <div className={styles.menuCover}>
 
           <nav className={styles.menu}>

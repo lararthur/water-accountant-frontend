@@ -16,3 +16,34 @@
 .menuIcon {
   padding:  1rem;
 }
+
+.menuBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.44);
+  z-index: 1;
+  overflow-x: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.menuCover {
+  position: relative;
+  height: 100%;
+  width: 200%;
+}
+
+.menu {
+  position: absolute;
+  width: calc(50% - 4rem);
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: $white;
+}

@@ -33,14 +33,18 @@
     bottom: 0;
     background: $lightblue;
     border-radius: 3px;
-    width: 67%;
+    width: 0;
+    transition: width 0.5s ease;
   }
 
   &__achievedAmount {
-    padding-left: 67%;
+    position: relative;
+    height: 0.75rem;
+    transition: padding 0.5s ease;
   }
   &__number {
     transform: translateX(-50%);
+    position: absolute;
   }
 }
 

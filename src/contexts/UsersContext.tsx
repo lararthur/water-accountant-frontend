@@ -26,6 +26,7 @@ interface UsersContextData {
   users: User[];
   registerUser: (param: UserParams) => void;
   loginUser: (param: UserParams) => void;
+  submitBasicInfo: (obj) => void;
 }
 
 interface UsersProviderProps {
@@ -85,11 +86,29 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
     login(userExists);
   };
 
+  const submitBasicInfo = ({
+    email, name, weight, weightMeasureUnit, language,
+  }) => {
+    const user = users.find((item) => item.email === email);
+    const otherUsers = users.filter((item) => item.email !== email);
+
+    const userWithBasicInfo = {
+      ...user, name, weight, weightMeasureUnit, language,
+    };
+
+    const newUsers = [...otherUsers, userWithBasicInfo];
+
+    setUsers(newUsers);
+    Cookies.set('WaterAccountantUsers', JSON.stringify(newUsers));
+    login(userWithBasicInfo);
+  };
+
   return (
     <UsersContext.Provider value={{
       users,
       registerUser,
       loginUser,
+      submitBasicInfo,
     }}
     >
       {children}

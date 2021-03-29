@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useContext, useState } from 'react';
 import SwitchComponent from '../components/common/SwitchComponent';
+import { LoggedUserContext } from '../contexts/LoggedUserContext';
+import { UsersContext } from '../contexts/UsersContext';
+import { ValidationsContext } from '../contexts/ValidationsContext';
 import styles from '../styles/basic-info.module.scss';
 
 type switchObjArrType = [
@@ -14,6 +18,14 @@ type switchObjArrType = [
 ];
 
 export default function basicInfoPage(): JSX.Element {
+  const { loggedUser } = useContext(LoggedUserContext);
+  const router = useRouter();
+
+  if (process.browser && !loggedUser) {
+    router.push('/');
+  }
+
+  const { submitBasicInfo } = useContext(UsersContext);
   const defaultSwitchObjArr: switchObjArrType = [
     {
       identifier: 'Lb',
@@ -33,6 +45,13 @@ export default function basicInfoPage(): JSX.Element {
   const [weightMeasureUnit, setWeightMeasureUnit] = useState('lb');
   const [language, setLanguage] = useState('en-US');
 
+  const {
+    nameObj,
+    weightObj,
+    validateName,
+    validateWeight,
+  } = useContext(ValidationsContext);
+
   const switchSubscriber = (newSwitchObjArr) => {
     const selectedObj = newSwitchObjArr.find((item) => item.checked);
 
@@ -45,16 +64,40 @@ export default function basicInfoPage(): JSX.Element {
     const fieldValue = e.target.value;
     if (fieldName === 'name') {
       setName(fieldValue);
+      validateName(fieldValue);
     }
     if (fieldName === 'weight') {
-      if (fieldValue < 0) {
-        setWeight(fieldValue * -1);
+      const valueToNumber = Number(fieldValue);
+
+      if (valueToNumber < 0) {
+        const fixedValue = valueToNumber * -1;
+
+        setWeight(fixedValue);
+        validateWeight(fixedValue);
       } else {
-        setWeight(fieldValue);
+        setWeight(valueToNumber);
+        validateWeight(valueToNumber);
       }
     }
     if (fieldName === 'language') {
       setLanguage(fieldValue);
+    }
+  };
+
+  const handleSubmitBasicInfo = () => {
+    validateName(name);
+    validateWeight(weight);
+
+    if (nameObj.isValid && weightObj.isValid) {
+      const submitBasicInfoObj = {
+        email: loggedUser.email,
+        name,
+        weight,
+        weightMeasureUnit,
+        language,
+      };
+      submitBasicInfo(submitBasicInfoObj);
+      router.push('/water-accountant');
     }
   };
 
@@ -65,7 +108,10 @@ export default function basicInfoPage(): JSX.Element {
       <form className="form">
         <label
           htmlFor="name"
-          className="label"
+          // i'm comapring (isValid === false) because the initial value is null...
+          // And it can become false only after validated...
+          // I only want to have the error class after validated.
+          className={`label ${(nameObj.isValid === false) && 'label--error'}`}
         >
           <span className="label__text">Name</span>
           <input
@@ -76,12 +122,16 @@ export default function basicInfoPage(): JSX.Element {
             value={name}
             onChange={(e) => handleField(e)}
           />
+          <span className="tooltip">{nameObj.message}</span>
         </label>
 
         <div className="inputGroup">
           <label
             htmlFor="weight"
-            className="label"
+            // i'm comapring (isValid === false) because the initial value is null...
+            // And it can become false only after validated...
+            // I only want to have the error class after validated.
+            className={`label ${(weightObj.isValid === false) && 'label--error'}`}
           >
             <span className="label__text">Weight</span>
             <input
@@ -92,6 +142,7 @@ export default function basicInfoPage(): JSX.Element {
               value={weight || ''}
               onChange={(e) => handleField(e)}
             />
+            <span className="tooltip">{weightObj.message}</span>
           </label>
 
           <span
@@ -126,6 +177,7 @@ export default function basicInfoPage(): JSX.Element {
           className="button"
           type="button"
           value="Continue"
+          onClick={handleSubmitBasicInfo}
         />
 
       </form>

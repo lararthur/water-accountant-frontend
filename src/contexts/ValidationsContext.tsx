@@ -190,8 +190,8 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
       return;
     }
 
-    const strName = name.replace(/ +(?= )/g, '').trim();
-    const namingPattern = /^[a-zA-Z\u00C0-\u00FF]*$/;
+    const strName = name.replace(/\s\s+/g, '').trim();
+    const namingPattern = /^[A-Za-z ,.'-]+$/;
 
     if (namingPattern.test(strName)) {
       setNameObj({ isValid: true, message: null });
@@ -208,6 +208,7 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
         message: 'No weight was provided',
       };
       setWeightObj(newWeightObj);
+      return;
     }
 
     if (typeof weight !== 'number') {
@@ -215,16 +216,17 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
         isValid: false,
         message: 'Weight must be a number',
       };
-      setNameObj(newWeightObj);
+      setWeightObj(newWeightObj);
       return;
     }
 
-    if (weight < 0 || weight > 500) {
+    if (weight <= 0 || weight > 500) {
       const newWeightObj = {
         isValid: false,
         message: 'Invalid weight',
       };
       setWeightObj(newWeightObj);
+      return;
     }
 
     setWeightObj({ isValid: true, message: null });

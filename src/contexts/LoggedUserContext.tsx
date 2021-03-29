@@ -26,6 +26,11 @@ export function LoggedUserProvider({ children }: LoggedUserProvider): JSX.Elemen
   const loggedUserExists = Cookies.get('LoggedUser');
   const loggedUserFormated = loggedUserExists ? JSON.parse(loggedUserExists) : null;
 
+  /*
+  @TODO:
+  -> fix the Warning: Text content did not match. Server: " null" Client: " Name".
+  -> maybe when chaged to some real DB, the these Cookies problems will stop
+  */
   const [loggedUser, setLoggedUser] = useState(loggedUserFormated || null);
 
   const login = (user) => {

@@ -1,0 +1,69 @@
+@import '../styles/variables.scss';
+
+.waterAccountantContainer {
+  padding-top: 4rem;
+  padding-bottom: 8.8125rem;
+}
+
+.infoBox {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.indicator {
+  padding: 2rem 0;
+  font-size: 0.75rem;
+  &__MinMax {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__progressBar {
+    background: $lightgrey;
+    border-radius: 3px;
+    height: 0.5rem;
+    margin: 0.5rem 0;
+    position: relative;
+  }
+  &__achievedBar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: $lightblue;
+    border-radius: 3px;
+    width: 67%;
+  }
+
+  &__achievedAmount {
+    padding-left: 67%;
+  }
+  &__number {
+    transform: translateX(-50%);
+  }
+}
+
+.counter {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__greeter {
+    font-size: 1.125rem;
+    padding-bottom: 1rem;
+    line-height: 1;
+    text-align: center;
+  }
+  &__numbers {
+    font-family: Roboto, sans-serif;
+    font-weight: 400;
+    font-size: 1.875rem;
+    line-height: 1;
+  }
+  &__drank {
+    color: $blue;
+  }
+}

@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { LoggedUserContext } from '../contexts/LoggedUserContext';
 import styles from '../styles/water-accountant.module.scss';
+import MenuComponent from '../components/common/MenuComponent';
 
 export default function WaterAccountant(): JSX.Element {
   const router = useRouter();
@@ -42,6 +43,8 @@ export default function WaterAccountant(): JSX.Element {
 
   return (
     <section className={`wrapper wrapper--fullHeight wrapper--greyBg ${styles.waterAccountantContainer}`}>
+      <MenuComponent />
+
       <div className={styles.infoBox}>
 
         <div className={styles.indicator}>

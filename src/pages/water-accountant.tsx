@@ -15,11 +15,11 @@ export default function WaterAccountant(): JSX.Element {
   const [progressBar, setProgressBar] = useState(defaultProgressBar);
 
   const defineIndicatorNumberPosition = (): string => {
-    if (progressBar.percentage > 5) {
-      return '-50%';
-    }
     if (progressBar.percentage > 94) {
       return '-100%';
+    }
+    if (progressBar.percentage > 5) {
+      return '-50%';
     }
     return '0';
   };

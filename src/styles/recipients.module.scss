@@ -11,13 +11,48 @@
   align-items: center;
   text-align: center;
   font-size: 0.875rem;
+  background: $white;
 }
 
 .recipientsBox {
   padding: 0.5rem 0.5rem 0.5rem 1rem;
+  flex: 1;
+  height: 100%;
+  box-sizing: border-box;
+
+  &__scrolling {
+    height: 100%;
+  }
   
   &__arrow {
     margin-top: 0.5rem;
+  }
+}
+
+.recipient {
+  height: 100%;
+  padding: 0.5rem;
+  background: $white;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 3px 3px 10px -5px rgba(0, 0, 0, 0.25);
+  
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  &__image {
+    width: 2.625rem;
+  }
+  &__name {
+    font-family: Roboto, sans-serif;
+    font-weight: 700;
+    color: $blue;
+    min-width: 5.25rem;
   }
 }
 
@@ -31,6 +66,7 @@
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
   padding: 0 1rem;
+  max-width: 6.25rem;
   
   &__icon {
     margin-bottom: 0.5rem;

@@ -2,48 +2,41 @@ import React, { useRef, useState } from 'react';
 import styles from '../../styles/menu.module.scss';
 
 export default function MenuComponent(): JSX.Element {
-  const menuBgRef = useRef();
-  /* menuBgRef.current && menuBgRef.current.scroll({
-    left: menuBgRef.current.offsetWidth,
-    behavior: 'smooth',
-  }); */
+  const menuBgRef = useRef<HTMLElement>();
+  const menuBgElement = menuBgRef.current;
 
-  const [isScrolling, setIsScrolling] = useState(false);
+  /*
+  if (menuBgElement) {
+      menuBgElement.scroll({
+        left: menuBgElement.offsetWidth,
+        behavior: 'smooth',
+      });
+    }
+  */
 
-  const moveMenuHandler = () => {
-    if (!isScrolling) {
-      setIsScrolling(true);
+  const scrollFinished = () => {
+    const changesOn = (menuBgElement.scrollWidth / 2) - (menuBgElement.offsetWidth / 4);
+    if (menuBgElement.scrollLeft <= changesOn) {
+      menuBgElement.scroll({
+        left: 0,
+        behavior: 'smooth',
+      });
+    } else {
+      menuBgElement.scroll({
+        left: menuBgElement.offsetWidth,
+        behavior: 'smooth',
+      });
     }
   };
 
-  const dropMenuHandler = () => {
-    if (isScrolling) {
-      // const changesOn = (scrollWidth / 2) - (offsetWidth / 4)
-      // if scrollLeft <= chagesOn ? closeMenu() : openMenu()
+  const [scrollTimer, setScrollTimer] = useState(-1);
 
-      const changesOn = (menuBgRef.current.scrollWidth / 2) - (menuBgRef.current.offsetWidth / 4);
-      if (menuBgRef.current.scrollLeft <= changesOn) {
-        console.log('close menu');
-
-        setTimeout(() => {
-          menuBgRef.current.scroll({
-            left: 0,
-            behavior: 'smooth',
-          });
-        }, 200);
-      } else {
-        console.log('open menu');
-
-        setTimeout(() => {
-          menuBgRef.current.scroll({
-            left: menuBgRef.current.offsetWidth,
-            behavior: 'smooth',
-          });
-        }, 200);
-      }
-
-      setIsScrolling(false);
+  const scrollHandler = () => {
+    if (scrollTimer !== -1) {
+      clearTimeout(scrollTimer);
     }
+
+    setScrollTimer(window.setTimeout(scrollFinished, 75));
   };
 
   return (
@@ -64,8 +57,7 @@ export default function MenuComponent(): JSX.Element {
         /* @TODO: assign to 'aria-checked' the 'isMenuOpen' flag */
         aria-checked="false"
         ref={menuBgRef}
-        onTouchStart={moveMenuHandler}
-        onTouchEnd={dropMenuHandler}
+        onScroll={scrollHandler}
         className={styles.menuBackground}
       >
         <div className={styles.menuCover}>

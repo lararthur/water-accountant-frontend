@@ -25,22 +25,28 @@ export default function RecipientsComponent():JSX.Element {
 
         {(recipients.length > 0) ? (
           <div className={styles.recipientsBox__scrolling}>
-            <button
-              type="button"
-              className={styles.recipient}
-            >
-              <div className={styles.recipient__info}>
-                <img
-                  className={styles.recipient__image}
-                  src="recipients/glass.png"
-                  alt="Glass of water"
-                />
-                <p className={styles.recipient__name}>Small Glass</p>
-                <p className={styles.recipient__measure}>200ml</p>
-              </div>
+            {recipients.map((item) => (
 
-              {/* recipient__actions */}
-            </button>
+              <button
+                type="button"
+                className={styles.recipient}
+              >
+                <div className={styles.recipient__info}>
+                  <img
+                    className={styles.recipient__image}
+                    src={`recipients/${item.type}.png`}
+                    alt="Glass of water"
+                  />
+                  <p className={styles.recipient__name}>{item.name}</p>
+                  <p className={styles.recipient__measure}>
+                    {item.measure}
+                    ml
+                  </p>
+                </div>
+
+                {/* recipient__actions */}
+              </button>
+            ))}
           </div>
         ) : (
           <div>

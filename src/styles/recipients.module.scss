@@ -1,3 +1,5 @@
+@import '../styles/variables.scss';
+
 .recipientsContainer {
   height: 8.8125rem;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
@@ -5,4 +7,32 @@
   bottom: 0;
   left: 0;
   right: 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.recipientsBox {
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  
+  &__arrow {
+    margin-top: 0.5rem;
+  }
+}
+
+.drinkOrAddButton {
+  color: $white;
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+  border: none;
+  height: 100%;
+  background: $blue;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  padding: 0 1rem;
+  
+  &__icon {
+    margin-bottom: 0.5rem;
+  }
 }

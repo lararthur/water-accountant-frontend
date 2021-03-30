@@ -49,7 +49,7 @@ export default function RecipientsComponent():JSX.Element {
             ))}
           </div>
         ) : (
-          <div>
+          <div className={styles.recipientsBox__empty}>
             You don’t have any drinking recipient added to your shortcut...
             You can do it by clicking the button to the right!
             <img

@@ -4,16 +4,19 @@ import styles from '../../styles/recipients.module.scss';
 export default function RecipientsComponent():JSX.Element {
   const [recipients, setRecipients] = useState([
     {
+      id: 1,
       name: 'Small glass',
       measure: 200,
       type: 'glass',
     },
     {
+      id: 2,
       name: 'Small bottle',
       measure: 200,
       type: 'bottle',
     },
     {
+      id: 3,
       name: 'Medium bottle',
       measure: 300,
       type: 'bottle',
@@ -28,6 +31,7 @@ export default function RecipientsComponent():JSX.Element {
             {recipients.map((item) => (
 
               <button
+                key={`recipient${item.id}`}
                 type="button"
                 className={styles.recipient}
               >

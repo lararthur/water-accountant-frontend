@@ -2,30 +2,55 @@ import React, { useRef, useState } from 'react';
 import styles from '../../styles/menu.module.scss';
 
 export default function MenuComponent(): JSX.Element {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openedMenuClass, setOpenedMenuClass] = useState('');
+
   const menuBgRef = useRef<HTMLElement>();
-  const menuBgElement = menuBgRef.current;
 
-  /*
-  if (menuBgElement) {
-      menuBgElement.scroll({
-        left: menuBgElement.offsetWidth,
-        behavior: 'smooth',
-      });
-    }
-  */
+  const openMenu = () => {
+    setIsMenuOpen(true);
 
-  const scrollFinished = () => {
-    const changesOn = (menuBgElement.scrollWidth / 2) - (menuBgElement.offsetWidth / 4);
-    if (menuBgElement.scrollLeft <= changesOn) {
-      menuBgElement.scroll({
+    setTimeout(() => {
+      if (menuBgRef.current) {
+        menuBgRef.current.scroll({
+          left: menuBgRef.current.offsetWidth,
+          behavior: 'smooth',
+        });
+        setOpenedMenuClass('menuBackground--opened');
+      }
+    }, 100);
+  };
+
+  const closeMenu = () => {
+    if (menuBgRef.current) {
+      menuBgRef.current.scroll({
         left: 0,
         behavior: 'smooth',
       });
-    } else {
-      menuBgElement.scroll({
-        left: menuBgElement.offsetWidth,
-        behavior: 'smooth',
-      });
+    }
+
+    setTimeout(() => {
+      setOpenedMenuClass('');
+      setIsMenuOpen(false);
+    }, 200);
+  };
+
+  const scrollFinished = () => {
+    const closesOn = (menuBgRef.current.scrollWidth / 2) - (menuBgRef.current.offsetWidth / 4);
+    if (menuBgRef.current.scrollLeft <= closesOn) {
+      closeMenu();
+      return;
+    }
+    openMenu();
+  };
+
+  const handleMenuKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      if (isMenuOpen) {
+        closeMenu();
+        return;
+      }
+      openMenu();
     }
   };
 
@@ -42,7 +67,13 @@ export default function MenuComponent(): JSX.Element {
   return (
     <>
       <section className={styles.menuBar}>
-        <div className={styles.menuIcon}>
+        <div
+          tabIndex={0}
+          role="button"
+          className={styles.menuIcon}
+          onClick={openMenu}
+          onKeyDown={(e) => handleMenuKeyDown(e)}
+        >
           <img
             className={styles.menuIcon__icon}
             src="icons/menu.svg"
@@ -54,11 +85,10 @@ export default function MenuComponent(): JSX.Element {
       <section
         tabIndex={0}
         role="switch"
-        /* @TODO: assign to 'aria-checked' the 'isMenuOpen' flag */
-        aria-checked="false"
+        aria-checked={isMenuOpen}
         ref={menuBgRef}
         onScroll={scrollHandler}
-        className={styles.menuBackground}
+        className={`${styles.menuBackground} ${openedMenuClass && styles[openedMenuClass]}`}
       >
         <div className={styles.menuCover}>
 

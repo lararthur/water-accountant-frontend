@@ -23,13 +23,18 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.44);
-  z-index: 1;
+  background: rgba(0, 0, 0, 0);
+  z-index: -1;
   overflow-x: scroll;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+  transition: background 0.2s ease;
   &::-webkit-scrollbar {
     display: none;
+  }
+  &--opened {
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.44);
   }
 }
 

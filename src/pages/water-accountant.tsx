@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { LoggedUserContext } from '../contexts/LoggedUserContext';
 import styles from '../styles/water-accountant.module.scss';
 import MenuComponent from '../components/common/MenuComponent';
+import RecipientsComponent from '../components/pagesComponents/RecipientsComponent';
 
 export default function WaterAccountant(): JSX.Element {
   const router = useRouter();
@@ -94,6 +95,8 @@ export default function WaterAccountant(): JSX.Element {
         </div>
 
       </div>
+
+      <RecipientsComponent />
     </section>
   );
 }

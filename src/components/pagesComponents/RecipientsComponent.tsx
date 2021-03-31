@@ -48,7 +48,28 @@ export default function RecipientsComponent():JSX.Element {
                   </p>
                 </div>
 
-                {/* recipient__actions */}
+                <div className={styles.recipient__actions}>
+                  <div className={`${styles.recipient__action} ${styles['recipient__action--drink']}`}>
+                    <div className={styles.recipient__actionIcon}>
+                      <img src="icons/drink.svg" alt="Drink" />
+                    </div>
+                    <p>Drink</p>
+                  </div>
+
+                  <div className={`${styles.recipient__action} ${styles['recipient__action--edit']}`}>
+                    <div className={styles.recipient__actionIcon}>
+                      <img src="icons/edit.svg" alt="Edit" />
+                    </div>
+                    <p>Edit</p>
+                  </div>
+
+                  <div className={`${styles.recipient__action} ${styles['recipient__action--remove']}`}>
+                    <div className={styles.recipient__actionIcon}>
+                      <img src="icons/remove.svg" alt="Remove" />
+                    </div>
+                    <p>Remove</p>
+                  </div>
+                </div>
               </button>
             ))}
           </div>

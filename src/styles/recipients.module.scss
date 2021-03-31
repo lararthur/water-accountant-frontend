@@ -49,6 +49,7 @@
   box-shadow: 3px 3px 10px -5px rgba(0, 0, 0, 0.25);
   margin: 0 0.5rem;
   min-width: fit-content;
+  display: flex;
   
   &__info {
     display: flex;
@@ -57,7 +58,6 @@
     justify-content: space-between;
     height: 100%;
   }
-
   &__image {
     height: 3.5rem;
   }
@@ -66,6 +66,47 @@
     font-weight: 700;
     color: $blue;
     min-width: 5.25rem;
+  }
+
+  &__actions {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 0 0 0.75rem;
+  }
+  &__action {
+    display: flex;
+    padding: 0.5rem;
+    align-items: center;
+    
+    &--drink {
+      color: $blue;
+      .recipient__actionIcon {
+        background: $blue;
+      }
+    }
+    &--edit {
+      color: $green;
+      .recipient__actionIcon {
+        background: $green;
+      }
+    }
+    &--remove {
+      color: $red;
+      .recipient__actionIcon {
+        background: $red;
+      }
+    }
+  }
+  &__actionIcon {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
   }
 }
 

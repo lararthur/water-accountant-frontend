@@ -1,7 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
+import Link from 'next/link';
 import styles from '../../styles/menu.module.scss';
+import { LoggedUserContext } from '../../contexts/LoggedUserContext';
 
 export default function MenuComponent(): JSX.Element {
+  const { logout } = useContext(LoggedUserContext);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openedMenuClass, setOpenedMenuClass] = useState('');
 
@@ -54,6 +58,10 @@ export default function MenuComponent(): JSX.Element {
     }
   };
 
+  const handleLogoutKeyDown = (e) => {
+    if (e.key === 'Enter') logout();
+  };
+
   const [scrollTimer, setScrollTimer] = useState(-1);
 
   const scrollHandler = () => {
@@ -92,14 +100,47 @@ export default function MenuComponent(): JSX.Element {
       >
         <div className={styles.menuCover}>
 
-          <nav className={styles.menu}>
-            <ul>
-              <li>Home</li>
-              <li>Add custom measure</li>
-              <li>My Info</li>
-              <li>Logout</li>
+          <div className={styles.menu}>
+            <div className={styles.menu__header}>
+              <div
+                tabIndex={0}
+                role="button"
+                className={styles.menu__closeIcon}
+                onClick={closeMenu}
+                onKeyDown={(e) => handleMenuKeyDown(e)}
+              >
+                <img src="icons/close.svg" alt="Close menu" />
+              </div>
+            </div>
+
+            <ul className={styles.menu__list}>
+              <li className={styles.menu__item}>
+                <Link href="/water-accountant">
+                  Home
+                </Link>
+              </li>
+              <li className={styles.menu__item}>
+                <Link href="/water-recipient">
+                  Add custom measure
+                </Link>
+              </li>
+              <li className={styles.menu__item}>
+                <Link href="/user-info">
+                  My Info
+                </Link>
+              </li>
+              <li className={styles.menu__item}>
+                <div
+                  tabIndex={0}
+                  role="button"
+                  onClick={logout}
+                  onKeyDown={(e) => handleLogoutKeyDown(e)}
+                >
+                  Logout
+                </div>
+              </li>
             </ul>
-          </nav>
+          </div>
 
         </div>
       </section>

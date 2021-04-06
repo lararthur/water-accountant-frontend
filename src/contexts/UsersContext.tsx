@@ -14,7 +14,7 @@ interface UserParams {
 }
 
 interface Recipient {
-  id: number;
+  id: number | null;
   name: string;
   measure: number;
   type: 'glass' | 'bottle';
@@ -35,6 +35,7 @@ interface UsersContextData {
   registerUser: (param: UserParams) => void;
   loginUser: (param: UserParams) => void;
   submitBasicInfo: (obj) => void;
+  addRecipient: (recipient: Recipient) => void;
 }
 
 interface UsersProviderProps {
@@ -49,7 +50,7 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
 
   const [users, setUsers] = useState(defaultUsers);
 
-  const { login } = useContext(LoggedUserContext);
+  const { loggedUser, login } = useContext(LoggedUserContext);
   const { setCustomErrorMessage } = useContext(ValidationsContext);
 
   const getUser = (email) => users.find((user) => user.email === email);
@@ -112,12 +113,36 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
     login(userWithBasicInfo);
   };
 
+  const addRecipient = (recipient) => {
+    const userRecipients = loggedUser.recipients || [];
+    const newRecipient = recipient;
+
+    if (userRecipients.length > 0) {
+      newRecipient.id = userRecipients[userRecipients.length - 1].id + 1;
+    } else {
+      newRecipient.id = 1;
+    }
+
+    const userWithRecipient = {
+      ...loggedUser,
+      recipients: [...userRecipients, newRecipient],
+    };
+
+    const otherUsers = users.filter((item) => item.email !== loggedUser.email);
+    const newUsers = [...otherUsers, userWithRecipient];
+
+    setUsers(newUsers);
+    Cookies.set('WaterAccountantUsers', JSON.stringify(newUsers));
+    login(userWithRecipient);
+  };
+
   return (
     <UsersContext.Provider value={{
       users,
       registerUser,
       loginUser,
       submitBasicInfo,
+      addRecipient,
     }}
     >
       {children}

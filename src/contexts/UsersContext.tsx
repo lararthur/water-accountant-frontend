@@ -13,13 +13,21 @@ interface UserParams {
   password: string;
 }
 
+interface Recipient {
+  id: number;
+  name: string;
+  measure: number;
+  type: 'glass' | 'bottle';
+}
+
 interface User {
   email: string;
   password: string;
-  name: string | null,
-  weight: number | null,
-  weightMeasureUnit: 'kg' | 'lb' | null,
-  language: 'pt-BR' | 'en-US' | null,
+  name: string | null;
+  weight: number | null;
+  weightMeasureUnit: 'kg' | 'lb' | null;
+  language: 'pt-BR' | 'en-US' | null;
+  recipients: Recipient[] | null;
 }
 
 interface UsersContextData {
@@ -62,6 +70,7 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
       weight: null,
       weightMeasureUnit: null,
       language: null,
+      recipients: null,
     };
 
     const newUsers = [...users, newUser];

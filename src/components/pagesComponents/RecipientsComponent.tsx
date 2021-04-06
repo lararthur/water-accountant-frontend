@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useState } from 'react';
 import styles from '../../styles/recipients.module.scss';
 
@@ -87,17 +88,19 @@ export default function RecipientsComponent():JSX.Element {
 
       </div>
 
-      <button
-        type="button"
-        className={styles.drinkOrAddButton}
-      >
-        <img
-          src="icons/add.svg"
-          alt="Drink or add custom measure"
-          className={styles.drinkOrAddButton__icon}
-        />
-        Drink/add custom measure
-      </button>
+      <Link href="/water-recipient">
+        <button
+          type="button"
+          className={styles.drinkOrAddButton}
+        >
+          <img
+            src="icons/add.svg"
+            alt="Drink or add custom measure"
+            className={styles.drinkOrAddButton__icon}
+          />
+          Drink/add custom measure
+        </button>
+      </Link>
     </section>
   );
 }

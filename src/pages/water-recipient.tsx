@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import MenuComponent from '../components/common/MenuComponent';
 import SwitchComponent from '../components/common/SwitchComponent';
 import { ValidationsContext } from '../contexts/ValidationsContext';
@@ -73,6 +73,22 @@ export default function WaterRecipient(): JSX.Element {
   const [measure, setMeasure] = useState(null);
   const [recipientName, setRecipientName] = useState('');
 
+  const [submitButtonValue, setSubmitButtonValue] = useState('Save');
+
+  useEffect(() => {
+    if (!addToShortcutSwitchObjArr[0].checked) {
+      setSubmitButtonValue('Drink');
+      return;
+    }
+    if (addToShortcutSwitchObjArr[0].checked && !drinkNowSwitchObjArr[0].checked) {
+      setSubmitButtonValue('Save');
+      return;
+    }
+    if (addToShortcutSwitchObjArr[0].checked && drinkNowSwitchObjArr[0].checked) {
+      setSubmitButtonValue('Save and Drink');
+    }
+  }, [addToShortcutSwitchObjArr, drinkNowSwitchObjArr]);
+
   const { measureObj, validateMeasure } = useContext(ValidationsContext);
 
   const handleField = (e) => {
@@ -99,10 +115,7 @@ export default function WaterRecipient(): JSX.Element {
   const handleSubmitRecipient = () => {
     /*
     @TODO:
-    -> make recipient type, drink now and recipient name fields...
-    -> ...render only if add to shortcut is true.
-    -> also, the button text will change if certain fields are true.
-    -> lastly, submit the form to save the changes.
+    -> submit the form to save the changes (validate before!!!).
     */
   };
 
@@ -112,19 +125,6 @@ export default function WaterRecipient(): JSX.Element {
       <p className="title">Add/Edit Water Recipient</p>
 
       <form className="form">
-
-        <div className="inputGroup">
-          <span
-            className="label"
-          >
-            <span className="label__text">Recipient type</span>
-            <SwitchComponent
-              relatedSwitch="recipientTypeSwitch"
-              switchObjArr={recipientTypeSwitchObjArr}
-              switchSubscriber={recipientTypeSwitchSubscriber}
-            />
-          </span>
-        </div>
 
         <label
           htmlFor="measure"
@@ -158,38 +158,54 @@ export default function WaterRecipient(): JSX.Element {
           </span>
         </div>
 
-        <div className="inputGroup">
-          <span
-            className="label"
-          >
-            <span className="label__text">Drink right now?</span>
-            <SwitchComponent
-              relatedSwitch="drinkNowSwitch"
-              switchObjArr={drinkNowSwitchObjArr}
-              switchSubscriber={drinkNowSwitchSubscriber}
-            />
-          </span>
-        </div>
+        {addToShortcutSwitchObjArr[0].checked && ([
+          <div className="inputGroup" key="recipientTypeSwitch">
+            <span
+              className="label"
+            >
+              <span className="label__text">Recipient type</span>
+              <SwitchComponent
+                relatedSwitch="recipientTypeSwitch"
+                switchObjArr={recipientTypeSwitchObjArr}
+                switchSubscriber={recipientTypeSwitchSubscriber}
+              />
+            </span>
+          </div>,
 
-        <label
-          htmlFor="recipientName"
-          className="label"
-        >
-          <span className="label__text">Recipient name (optional)</span>
-          <input
-            type="text"
-            name="recipientName"
-            id="recipientName"
-            className="input"
-            value={recipientName}
-            onChange={(e) => handleField(e)}
-          />
-        </label>
+          <div className="inputGroup" key="drinkNowSwitchObjArr">
+            <span
+              className="label"
+            >
+              <span className="label__text">Drink right now?</span>
+              <SwitchComponent
+                relatedSwitch="drinkNowSwitch"
+                switchObjArr={drinkNowSwitchObjArr}
+                switchSubscriber={drinkNowSwitchSubscriber}
+              />
+            </span>
+          </div>,
+
+          <label
+            htmlFor="recipientName"
+            className="label"
+            key="recipientName"
+          >
+            <span className="label__text">Recipient name (optional)</span>
+            <input
+              type="text"
+              name="recipientName"
+              id="recipientName"
+              className="input"
+              value={recipientName}
+              onChange={(e) => handleField(e)}
+            />
+          </label>,
+        ])}
 
         <input
           className="button"
           type="button"
-          value="Save and Drink"
+          value={submitButtonValue}
           onClick={handleSubmitRecipient}
         />
       </form>

@@ -62,6 +62,7 @@ export default function basicInfoPage(): JSX.Element {
   const handleField = (e) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
+
     if (fieldName === 'name') {
       setName(fieldValue);
       validateName(fieldValue);

@@ -15,11 +15,13 @@ interface ValidationsContextData {
   confirmPasswordObj: defaultObjProperties;
   nameObj: defaultObjProperties;
   weightObj: defaultObjProperties;
+  measureObj: defaultObjProperties;
   validateEmail: (email) => void;
   validatePassword: (password) => void;
   validateName: (name) => void;
   validateWeight: (weight) => void;
   validatePasswordEquality: (password, confirmPassword) => void;
+  validateMeasure: (measure) => void;
   resetValidations: () => void;
   setCustomErrorMessage: (name: string, message: string) => void;
 }
@@ -34,6 +36,7 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
   const [confirmPasswordObj, setConfirmPasswordObj] = useState(defaultObj);
   const [nameObj, setNameObj] = useState(defaultObj);
   const [weightObj, setWeightObj] = useState(defaultObj);
+  const [measureObj, setMeasureObj] = useState(defaultObj);
 
   const resetValidations = () => {
     setEmailObj(defaultObj);
@@ -201,6 +204,37 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
     setNameObj({ isValid: false, message: 'Invalid user name' });
   };
 
+  const validateMeasure = (measure) => {
+    if (!measure) {
+      const newMeasureObj = {
+        isValid: false,
+        message: 'No measure was provided',
+      };
+      setMeasureObj(newMeasureObj);
+      return;
+    }
+
+    if (typeof measure !== 'number') {
+      const newMeasureObj = {
+        isValid: false,
+        message: 'Measure must be a number',
+      };
+      setMeasureObj(newMeasureObj);
+      return;
+    }
+
+    if (measure <= 0) {
+      const newMeasureObj = {
+        isValid: false,
+        message: 'Invalid measure',
+      };
+      setMeasureObj(newMeasureObj);
+      return;
+    }
+
+    setMeasureObj({ isValid: true, message: null });
+  };
+
   const validateWeight = (weight) => {
     if (!weight) {
       const newWeightObj = {
@@ -239,11 +273,13 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
       confirmPasswordObj,
       nameObj,
       weightObj,
+      measureObj,
       validateEmail,
       validatePassword,
       validateName,
       validateWeight,
       validatePasswordEquality,
+      validateMeasure,
       resetValidations,
       setCustomErrorMessage,
     }}

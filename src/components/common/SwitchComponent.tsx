@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 interface defaultSwitchObj {
   identifier: string,
@@ -51,6 +51,9 @@ const SwitchComponent = (
     }
   };
 
+  const firstSwitchButtonRef = useRef<HTMLDivElement>(null);
+  const secondSwitchButtonRef = useRef<HTMLDivElement>(null);
+
   return (
     <>
       {switchObjArr.map((switchRadioItem) => {
@@ -76,10 +79,11 @@ const SwitchComponent = (
 
       <div className="switch">
         <div className="switch__wrapper">
-          {switchObjArr.map((switchItem) => {
+          {switchObjArr.map((switchItem, index) => {
             const formatedIdentifier = switchItem.identifier.replace(/\s/g, '').toLocaleLowerCase();
             return (
               <div
+                ref={(index === 0) ? firstSwitchButtonRef : secondSwitchButtonRef}
                 key={`switch-${formatedIdentifier}`}
                 className={`switch__button ${switchItem.checked && 'switch__button--selected'}`}
                 role="button"
@@ -91,7 +95,7 @@ const SwitchComponent = (
               </div>
             );
           })}
-          <div className="switch__selection" style={{ left: (switchObjArr[0].checked) ? '0' : '50%' }}>
+          <div className="switch__selection" style={{ left: (switchObjArr[0].checked) ? '0' : `${firstSwitchButtonRef.current.clientWidth}px` }}>
             {checkedIdentifier}
           </div>
         </div>

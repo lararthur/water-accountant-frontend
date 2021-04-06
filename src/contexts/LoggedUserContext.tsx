@@ -2,7 +2,7 @@ import React, { ReactNode, createContext, useState } from 'react';
 import Cookies from 'js-cookie';
 
 interface Recipient {
-  id: number;
+  id: number | null;
   name: string;
   measure: number;
   type: 'glass' | 'bottle';

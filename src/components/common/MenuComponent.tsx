@@ -32,14 +32,17 @@ export default function MenuComponent(): JSX.Element {
         behavior: 'smooth',
       });
     }
+    setOpenedMenuClass('');
 
     setTimeout(() => {
-      setOpenedMenuClass('');
       setIsMenuOpen(false);
     }, 200);
   };
 
   const scrollFinished = () => {
+    if (!menuBgRef.current) {
+      return;
+    }
     const closesOn = (menuBgRef.current.scrollWidth / 2) - (menuBgRef.current.offsetWidth / 4);
     if (menuBgRef.current.scrollLeft <= closesOn) {
       closeMenu();
@@ -90,60 +93,62 @@ export default function MenuComponent(): JSX.Element {
         </div>
       </section>
 
-      <section
-        tabIndex={0}
-        role="switch"
-        aria-checked={isMenuOpen}
-        ref={menuBgRef}
-        onScroll={scrollHandler}
-        className={`${styles.menuBackground} ${openedMenuClass && styles[openedMenuClass]}`}
-      >
-        <div className={styles.menuCover}>
+      {isMenuOpen && (
+        <section
+          tabIndex={0}
+          role="switch"
+          aria-checked={isMenuOpen}
+          ref={menuBgRef}
+          onScroll={scrollHandler}
+          className={`${styles.menuBackground} ${openedMenuClass && styles[openedMenuClass]}`}
+        >
+          <div className={styles.menuCover}>
 
-          <div className={styles.menu}>
-            <div className={styles.menu__header}>
-              <div
-                tabIndex={0}
-                role="button"
-                className={styles.menu__closeIcon}
-                onClick={closeMenu}
-                onKeyDown={(e) => handleMenuKeyDown(e)}
-              >
-                <img src="icons/close.svg" alt="Close menu" />
-              </div>
-            </div>
-
-            <ul className={styles.menu__list}>
-              <li className={styles.menu__item}>
-                <Link href="/water-accountant">
-                  Home
-                </Link>
-              </li>
-              <li className={styles.menu__item}>
-                <Link href="/water-recipient">
-                  Add custom measure
-                </Link>
-              </li>
-              <li className={styles.menu__item}>
-                <Link href="/user-info">
-                  My Info
-                </Link>
-              </li>
-              <li className={styles.menu__item}>
+            <div className={styles.menu}>
+              <div className={styles.menu__header}>
                 <div
                   tabIndex={0}
                   role="button"
-                  onClick={logout}
-                  onKeyDown={(e) => handleLogoutKeyDown(e)}
+                  className={styles.menu__closeIcon}
+                  onClick={closeMenu}
+                  onKeyDown={(e) => handleMenuKeyDown(e)}
                 >
-                  Logout
+                  <img src="icons/close.svg" alt="Close menu" />
                 </div>
-              </li>
-            </ul>
-          </div>
+              </div>
 
-        </div>
-      </section>
+              <ul className={styles.menu__list}>
+                <li className={styles.menu__item}>
+                  <Link href="/water-accountant">
+                    Home
+                  </Link>
+                </li>
+                <li className={styles.menu__item}>
+                  <Link href="/water-recipient">
+                    Add custom measure
+                  </Link>
+                </li>
+                <li className={styles.menu__item}>
+                  <Link href="/user-info">
+                    My Info
+                  </Link>
+                </li>
+                <li className={styles.menu__item}>
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    onClick={logout}
+                    onKeyDown={(e) => handleLogoutKeyDown(e)}
+                  >
+                    Logout
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </section>
+      )}
     </>
   );
 }

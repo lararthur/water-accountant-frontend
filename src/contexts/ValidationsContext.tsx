@@ -54,7 +54,7 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
     if (name === 'weight') setWeightObj({ isValid: false, message });
   };
 
-  const validateEmail = (email) => {
+  /* const validateEmail = (email) => {
     if (!email) {
       const newEmailObj = {
         isValid: false,
@@ -86,25 +86,34 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
     }
 
     setEmailObj({ isValid: true, message: null });
+  }; */
+
+  const validateEmail = (email) => {
+    if (!email) {
+      return 'No e-mail was provided';
+    }
+
+    if (typeof email !== 'string') {
+      return 'E-mail must be a string';
+    }
+
+    const emailRegexp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailIsValid = emailRegexp.test(email);
+
+    if (!emailIsValid) {
+      return 'Invalid user e-mail';
+    }
+
+    return false;
   };
 
   const validatePassword = (password) => {
     if (!password) {
-      const newPasswordObj = {
-        isValid: false,
-        message: 'No password was provided',
-      };
-      setPasswordObj(newPasswordObj);
-      return;
+      return 'No password was provided';
     }
 
     if (typeof password !== 'string') {
-      const newPasswordObj = {
-        isValid: false,
-        message: 'Password must be a string',
-      };
-      setPasswordObj(newPasswordObj);
-      return;
+      return 'Password must be a string';
     }
 
     // Strong password strength:
@@ -123,8 +132,7 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
     const passIsStrong = strongPassRegexp.test(password);
 
     if (passIsStrong) {
-      setPasswordObj({ isValid: true, message: null });
-      return;
+      return false;
     }
 
     // Medium password strength:
@@ -141,129 +149,73 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
     const passIsMedium = mediumPassRegexp.test(password);
 
     if (passIsMedium) {
-      setPasswordObj({ isValid: true, message: null });
-      return;
+      return false;
     }
 
-    const newPasswordObj = {
-      isValid: false,
-      message: 'Weak user password. A Password must have 8 characters length, at least one uppercase letter, one lowercase letter, one number and one special case letter',
-    };
-    setPasswordObj(newPasswordObj);
+    return 'Weak user password. A Password must have 8 characters length, at least one uppercase letter, one lowercase letter, one number and one special case letter';
   };
 
   const validatePasswordEquality = (password, confirmPassword) => {
     if (!confirmPassword) {
-      const newConfirmPasswordObj = {
-        isValid: false,
-        message: 'Confirm password is empty',
-      };
-      setConfirmPasswordObj(newConfirmPasswordObj);
-      return;
+      return 'Confirm password is empty';
     }
 
     if (password !== confirmPassword) {
-      const newConfirmPasswordObj = {
-        isValid: false,
-        message: 'Password and Confirm Password fields must be the same',
-      };
-      setConfirmPasswordObj(newConfirmPasswordObj);
-      return;
+      return 'Password and Confirm Password fields must be the same';
     }
 
-    setConfirmPasswordObj({ isValid: true, message: null });
+    return false;
   };
 
   const validateName = async (name) => {
     if (!name) {
-      const newNameObj = {
-        isValid: false,
-        message: 'No name was provided',
-      };
-      setNameObj(newNameObj);
-      return;
+      return 'No name was provided';
     }
 
     if (typeof name !== 'string') {
-      const newNameObj = {
-        isValid: false,
-        message: 'Name must be a string',
-      };
-      setNameObj(newNameObj);
-      return;
+      return 'Name must be a string';
     }
 
     const strName = name.replace(/\s\s+/g, '').trim();
     const namingPattern = /^[A-Za-z ,.'-]+$/;
 
     if (namingPattern.test(strName)) {
-      setNameObj({ isValid: true, message: null });
-      return;
+      return false;
     }
 
-    setNameObj({ isValid: false, message: 'Invalid user name' });
+    return 'Invalid user name';
   };
 
   const validateMeasure = (measure) => {
     if (!measure) {
-      const newMeasureObj = {
-        isValid: false,
-        message: 'No measure was provided',
-      };
-      setMeasureObj(newMeasureObj);
-      return;
+      return 'No measure was provided';
     }
 
     if (typeof measure !== 'number') {
-      const newMeasureObj = {
-        isValid: false,
-        message: 'Measure must be a number',
-      };
-      setMeasureObj(newMeasureObj);
-      return;
+      return 'Measure must be a number';
     }
 
     if (measure <= 0) {
-      const newMeasureObj = {
-        isValid: false,
-        message: 'Invalid measure',
-      };
-      setMeasureObj(newMeasureObj);
-      return;
+      return 'Invalid measure';
     }
 
-    setMeasureObj({ isValid: true, message: null });
+    return false;
   };
 
   const validateWeight = (weight) => {
     if (!weight) {
-      const newWeightObj = {
-        isValid: false,
-        message: 'No weight was provided',
-      };
-      setWeightObj(newWeightObj);
-      return;
+      return 'No weight was provided';
     }
 
     if (typeof weight !== 'number') {
-      const newWeightObj = {
-        isValid: false,
-        message: 'Weight must be a number',
-      };
-      setWeightObj(newWeightObj);
-      return;
+      return 'Weight must be a number';
     }
 
     if (weight <= 0 || weight > 500) {
-      const newWeightObj = {
-        isValid: false,
-        message: 'Invalid weight',
-      };
-      setWeightObj(newWeightObj);
-      return;
+      return 'Invalid weight';
     }
 
-    setWeightObj({ isValid: true, message: null });
+    return false;
   };
 
   return (

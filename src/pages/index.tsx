@@ -52,8 +52,9 @@ const Home = (): JSX.Element => {
 
   const [switchObjArr, setSwitchObjArr] = useState(defaultSwitchObjArr);
 
-  const switchSubscriber = (newSwitchObjArr) => {
+  const switchSubscriber = (newSwitchObjArr, handleReset) => {
     setSwitchObjArr(newSwitchObjArr);
+    handleReset();
     // will need to do some cleanup for the fomik state!
     resetValidations();
   };
@@ -69,6 +70,24 @@ const Home = (): JSX.Element => {
 
   const onSubmit = (values, actions) => {
     console.log('Submit', values);
+  };
+
+  const validate = (values) => {
+    const errors = {
+      email: null,
+      password: null,
+      confirmPassword: null,
+    };
+
+    errors.email = validateEmail(values.email);
+    errors.password = validatePassword(values.password);
+    errors.confirmPassword = validatePasswordEquality(values.password, values.confirmPassword);
+
+    if (!errors.email) { delete errors.email; }
+    if (!errors.password) { delete errors.password; }
+    if (!errors.confirmPassword) { delete errors.confirmPassword; }
+
+    return errors;
   };
 
   const handleField = (e) => {
@@ -94,8 +113,7 @@ const Home = (): JSX.Element => {
 
       {/*
         @TODO:
-        -> cleanup values when changing the switch
-        -> use validations on Formik`s way to do it
+        -> show the errors on the warning spots through the layout
         -> in the future, leave only the validatioons functions on the...
         -> ...Validations context. And probably it won`t be a context anymore.
       */}
@@ -107,8 +125,11 @@ const Home = (): JSX.Element => {
           password: '',
           confirmPassword: '',
         }}
+        validate={validate}
       >
-        {({ values, handleChange, handleSubmit }) => (
+        {({
+          values, handleChange, handleSubmit, handleReset,
+        }) => (
           <form
             className="form"
             onSubmit={handleSubmit}
@@ -117,7 +138,7 @@ const Home = (): JSX.Element => {
             <SwitchComponent
               relatedSwitch={relatedSwitch}
               switchObjArr={switchObjArr}
-              switchSubscriber={switchSubscriber}
+              switchSubscriber={(newSwitchObjArr) => switchSubscriber(newSwitchObjArr, handleReset)}
             />
 
             {switchObjArr[0].checked ? (

@@ -89,7 +89,7 @@ const Home = (): JSX.Element => {
 
       {/*
         @TODO:
-        -> show the errors on the warning spots through the layout
+        -> show field error only if it has been touched
         -> in the future, leave only the validatioons functions on the...
         -> ...Validations context. And probably it won`t be a context anymore.
       */}
@@ -104,7 +104,7 @@ const Home = (): JSX.Element => {
         validate={validate}
       >
         {({
-          values, handleChange, handleSubmit, handleReset,
+          values, handleChange, handleSubmit, handleReset, errors,
         }) => (
           <form
             className="form"
@@ -121,10 +121,7 @@ const Home = (): JSX.Element => {
               <>
                 <label
                   htmlFor="email"
-              // i'm comapring (isValid === false) because the initial value is null...
-              // And it can become false only after validated...
-              // I only want to have the error class after validated.
-                  className={`label ${(emailObj.isValid === false) && 'label--error'}`}
+                  className={`label ${errors.email && 'label--error'}`}
                 >
                   <span className="label__text">E-mail</span>
                   <input
@@ -135,15 +132,12 @@ const Home = (): JSX.Element => {
                     value={values.email}
                     onChange={handleChange}
                   />
-                  <span className="tooltip">{emailObj.message}</span>
+                  <span className="tooltip">{errors.email}</span>
                 </label>
 
                 <label
                   htmlFor="password"
-              // i'm comapring (isValid === false) because the initial value is null...
-              // And it can become false only after validated...
-              // I only want to have the error class after validated.
-                  className={`label ${(passwordObj.isValid === false) && 'label--error'}`}
+                  className={`label ${errors.password && 'label--error'}`}
                 >
                   <span className="label__text">Password</span>
                   <input
@@ -154,24 +148,14 @@ const Home = (): JSX.Element => {
                     value={values.password}
                     onChange={handleChange}
                   />
-                  <span className="tooltip">{passwordObj.message}</span>
+                  <span className="tooltip">{errors.password}</span>
                 </label>
-
-                {/* <input
-                  className="button"
-                  type="submit"
-                  value="Login"
-                  onClick={handleLogin}
-                /> */}
               </>
             ) : (
               <>
                 <label
                   htmlFor="email"
-              // i'm comapring (isValid === false) because the initial value is null...
-              // And it can become false only after validated...
-              // I only want to have the error class after validated.
-                  className={`label ${(emailObj.isValid === false) && 'label--error'}`}
+                  className={`label ${errors.email && 'label--error'}`}
                 >
                   <span className="label__text">E-mail</span>
                   <input
@@ -182,15 +166,12 @@ const Home = (): JSX.Element => {
                     value={values.email}
                     onChange={handleChange}
                   />
-                  <span className="tooltip">{emailObj.message}</span>
+                  <span className="tooltip">{errors.email}</span>
                 </label>
 
                 <label
                   htmlFor="password"
-              // i'm comapring (isValid === false) because the initial value is null...
-              // And it can become false only after validated...
-              // I only want to have the error class after validated.
-                  className={`label ${(passwordObj.isValid === false) && 'label--error'}`}
+                  className={`label ${errors.password && 'label--error'}`}
                 >
                   <span className="label__text">Password</span>
                   <input
@@ -201,15 +182,12 @@ const Home = (): JSX.Element => {
                     value={values.password}
                     onChange={handleChange}
                   />
-                  <span className="tooltip">{passwordObj.message}</span>
+                  <span className="tooltip">{errors.password}</span>
                 </label>
 
                 <label
                   htmlFor="confirm-password"
-              // i'm comapring (isValid === false) because the initial value is null...
-              // And it can become false only after validated...
-              // I only want to have the error class after validated.
-                  className={`label ${(confirmPasswordObj.isValid === false) && 'label--error'}`}
+                  className={`label ${errors.confirmPassword && 'label--error'}`}
                 >
                   <span className="label__text">Confirm Password</span>
                   <input
@@ -220,15 +198,8 @@ const Home = (): JSX.Element => {
                     value={values.confirmPassword}
                     onChange={handleChange}
                   />
-                  <span className="tooltip">{confirmPasswordObj.message}</span>
+                  <span className="tooltip">{errors.confirmPassword}</span>
                 </label>
-
-                {/* <input
-                  className="button"
-                  type="submit"
-                  value="Register"
-                  onClick={handleRegister}
-                /> */}
               </>
             )}
 

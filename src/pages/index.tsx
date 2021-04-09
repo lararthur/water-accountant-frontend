@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { Formik } from 'formik';
 import SwitchComponent from '../components/common/SwitchComponent';
 import styles from '../styles/home.module.scss';
 import { UsersContext } from '../contexts/UsersContext';
@@ -51,47 +52,35 @@ const Home = (): JSX.Element => {
 
   const [switchObjArr, setSwitchObjArr] = useState(defaultSwitchObjArr);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
   const switchSubscriber = (newSwitchObjArr) => {
     setSwitchObjArr(newSwitchObjArr);
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
+    // will need to do some cleanup for the fomik state!
     resetValidations();
   };
 
   const handleRegister = () => {
-    // fields validations
-    validateEmail(email);
-    validatePassword(password);
-    validatePasswordEquality(password, confirmPassword);
-
-    if (emailObj.isValid && passwordObj.isValid && confirmPasswordObj.isValid) {
-      // send data to user registration
-      registerUser({ email, password });
-    }
+    // send data to user registration
+    /* registerUser({ email, password }); */
   };
 
   const handleLogin = () => {
-    loginUser({ email, password });
+    /* loginUser({ email, password }); */
+  };
+
+  const onSubmit = (values, actions) => {
+    console.log('Submit', values);
   };
 
   const handleField = (e) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
     if (fieldName === 'email') {
-      setEmail(fieldValue);
       validateEmail(fieldValue);
     }
     if (fieldName === 'password') {
-      setPassword(fieldValue);
       validatePassword(fieldValue);
     }
     if (fieldName === 'confirmPassword') {
-      setConfirmPassword(fieldValue);
       validatePasswordEquality(password, fieldValue);
     }
   };
@@ -103,129 +92,139 @@ const Home = (): JSX.Element => {
         Accountant
       </h1>
 
-      <form className="form">
+      <Formik
+        onSubmit={onSubmit}
+        initialValues={{
+          email: '',
+          password: '',
+          confirmPassword: '',
+        }}
+      >
+        {({ handleSubmit }) => (
+          <form
+            className="form"
+            onSubmit={handleSubmit}
+          >
 
-        <SwitchComponent
-          relatedSwitch={relatedSwitch}
-          switchObjArr={switchObjArr}
-          switchSubscriber={switchSubscriber}
-        />
+            <SwitchComponent
+              relatedSwitch={relatedSwitch}
+              switchObjArr={switchObjArr}
+              switchSubscriber={switchSubscriber}
+            />
 
-        {switchObjArr[0].checked ? (
-          <>
-            <label
-              htmlFor="email"
+            {switchObjArr[0].checked ? (
+              <>
+                <label
+                  htmlFor="email"
               // i'm comapring (isValid === false) because the initial value is null...
               // And it can become false only after validated...
               // I only want to have the error class after validated.
-              className={`label ${(emailObj.isValid === false) && 'label--error'}`}
-            >
-              <span className="label__text">E-mail</span>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="input"
-                onChange={(e) => handleField(e)}
-                value={email}
-              />
-              <span className="tooltip">{emailObj.message}</span>
-            </label>
+                  className={`label ${(emailObj.isValid === false) && 'label--error'}`}
+                >
+                  <span className="label__text">E-mail</span>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    className="input"
+                  />
+                  <span className="tooltip">{emailObj.message}</span>
+                </label>
 
-            <label
-              htmlFor="password"
+                <label
+                  htmlFor="password"
               // i'm comapring (isValid === false) because the initial value is null...
               // And it can become false only after validated...
               // I only want to have the error class after validated.
-              className={`label ${(passwordObj.isValid === false) && 'label--error'}`}
-            >
-              <span className="label__text">Password</span>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                className="input"
-                onChange={(e) => handleField(e)}
-                value={password}
-              />
-              <span className="tooltip">{passwordObj.message}</span>
-            </label>
+                  className={`label ${(passwordObj.isValid === false) && 'label--error'}`}
+                >
+                  <span className="label__text">Password</span>
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    className="input"
+                  />
+                  <span className="tooltip">{passwordObj.message}</span>
+                </label>
+
+                {/* <input
+                  className="button"
+                  type="submit"
+                  value="Login"
+                  onClick={handleLogin}
+                /> */}
+              </>
+            ) : (
+              <>
+                <label
+                  htmlFor="email"
+              // i'm comapring (isValid === false) because the initial value is null...
+              // And it can become false only after validated...
+              // I only want to have the error class after validated.
+                  className={`label ${(emailObj.isValid === false) && 'label--error'}`}
+                >
+                  <span className="label__text">E-mail</span>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    className="input"
+                  />
+                  <span className="tooltip">{emailObj.message}</span>
+                </label>
+
+                <label
+                  htmlFor="password"
+              // i'm comapring (isValid === false) because the initial value is null...
+              // And it can become false only after validated...
+              // I only want to have the error class after validated.
+                  className={`label ${(passwordObj.isValid === false) && 'label--error'}`}
+                >
+                  <span className="label__text">Password</span>
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    className="input"
+                  />
+                  <span className="tooltip">{passwordObj.message}</span>
+                </label>
+
+                <label
+                  htmlFor="confirm-password"
+              // i'm comapring (isValid === false) because the initial value is null...
+              // And it can become false only after validated...
+              // I only want to have the error class after validated.
+                  className={`label ${(confirmPasswordObj.isValid === false) && 'label--error'}`}
+                >
+                  <span className="label__text">Confirm Password</span>
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    id="confirm-password"
+                    className="input"
+                  />
+                  <span className="tooltip">{confirmPasswordObj.message}</span>
+                </label>
+
+                {/* <input
+                  className="button"
+                  type="submit"
+                  value="Register"
+                  onClick={handleRegister}
+                /> */}
+              </>
+            )}
 
             <input
               className="button"
-              type="button"
-              value="Login"
-              onClick={handleLogin}
+              type="submit"
+              value={switchObjArr[0].checked ? 'Login' : 'Register'}
             />
-          </>
-        ) : (
-          <>
-            <label
-              htmlFor="email"
-              // i'm comapring (isValid === false) because the initial value is null...
-              // And it can become false only after validated...
-              // I only want to have the error class after validated.
-              className={`label ${(emailObj.isValid === false) && 'label--error'}`}
-            >
-              <span className="label__text">E-mail</span>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="input"
-                onChange={(e) => handleField(e)}
-                value={email}
-              />
-              <span className="tooltip">{emailObj.message}</span>
-            </label>
-
-            <label
-              htmlFor="password"
-              // i'm comapring (isValid === false) because the initial value is null...
-              // And it can become false only after validated...
-              // I only want to have the error class after validated.
-              className={`label ${(passwordObj.isValid === false) && 'label--error'}`}
-            >
-              <span className="label__text">Password</span>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                className="input"
-                onChange={(e) => handleField(e)}
-                value={password}
-              />
-              <span className="tooltip">{passwordObj.message}</span>
-            </label>
-
-            <label
-              htmlFor="confirm-password"
-              // i'm comapring (isValid === false) because the initial value is null...
-              // And it can become false only after validated...
-              // I only want to have the error class after validated.
-              className={`label ${(confirmPasswordObj.isValid === false) && 'label--error'}`}
-            >
-              <span className="label__text">Confirm Password</span>
-              <input
-                type="password"
-                name="confirmPassword"
-                id="confirm-password"
-                className="input"
-                onChange={(e) => handleField(e)}
-                value={confirmPassword}
-              />
-              <span className="tooltip">{confirmPasswordObj.message}</span>
-            </label>
-
-            <input
-              className="button"
-              type="button"
-              value="Register"
-              onClick={handleRegister}
-            />
-          </>
+          </form>
         )}
-      </form>
+      </Formik>
 
     </section>
   );

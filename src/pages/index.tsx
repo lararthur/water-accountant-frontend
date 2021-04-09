@@ -27,7 +27,6 @@ const Home = (): JSX.Element => {
     router.push('/water-accountant');
   }
 
-  const { registerUser, loginUser } = useContext(UsersContext);
   const {
     emailObj,
     passwordObj,
@@ -59,15 +58,6 @@ const Home = (): JSX.Element => {
     resetValidations();
   };
 
-  const handleRegister = () => {
-    // send data to user registration
-    /* registerUser({ email, password }); */
-  };
-
-  const handleLogin = () => {
-    /* loginUser({ email, password }); */
-  };
-
   const onSubmit = (values, actions) => {
     console.log('Submit', values);
   };
@@ -88,20 +78,6 @@ const Home = (): JSX.Element => {
     if (!errors.confirmPassword) { delete errors.confirmPassword; }
 
     return errors;
-  };
-
-  const handleField = (e) => {
-    const fieldName = e.target.name;
-    const fieldValue = e.target.value;
-    if (fieldName === 'email') {
-      validateEmail(fieldValue);
-    }
-    if (fieldName === 'password') {
-      validatePassword(fieldValue);
-    }
-    if (fieldName === 'confirmPassword') {
-      validatePasswordEquality(password, fieldValue);
-    }
   };
 
   return (

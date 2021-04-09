@@ -92,6 +92,14 @@ const Home = (): JSX.Element => {
         Accountant
       </h1>
 
+      {/*
+        @TODO:
+        -> cleanup values when changing the switch
+        -> use validations on Formik`s way to do it
+        -> in the future, leave only the validatioons functions on the...
+        -> ...Validations context. And probably it won`t be a context anymore.
+      */}
+
       <Formik
         onSubmit={onSubmit}
         initialValues={{
@@ -100,7 +108,7 @@ const Home = (): JSX.Element => {
           confirmPassword: '',
         }}
       >
-        {({ handleSubmit }) => (
+        {({ values, handleChange, handleSubmit }) => (
           <form
             className="form"
             onSubmit={handleSubmit}
@@ -127,6 +135,8 @@ const Home = (): JSX.Element => {
                     name="email"
                     id="email"
                     className="input"
+                    value={values.email}
+                    onChange={handleChange}
                   />
                   <span className="tooltip">{emailObj.message}</span>
                 </label>
@@ -144,6 +154,8 @@ const Home = (): JSX.Element => {
                     name="password"
                     id="password"
                     className="input"
+                    value={values.password}
+                    onChange={handleChange}
                   />
                   <span className="tooltip">{passwordObj.message}</span>
                 </label>
@@ -170,6 +182,8 @@ const Home = (): JSX.Element => {
                     name="email"
                     id="email"
                     className="input"
+                    value={values.email}
+                    onChange={handleChange}
                   />
                   <span className="tooltip">{emailObj.message}</span>
                 </label>
@@ -187,6 +201,8 @@ const Home = (): JSX.Element => {
                     name="password"
                     id="password"
                     className="input"
+                    value={values.password}
+                    onChange={handleChange}
                   />
                   <span className="tooltip">{passwordObj.message}</span>
                 </label>
@@ -204,6 +220,8 @@ const Home = (): JSX.Element => {
                     name="confirmPassword"
                     id="confirm-password"
                     className="input"
+                    value={values.confirmPassword}
+                    onChange={handleChange}
                   />
                   <span className="tooltip">{confirmPasswordObj.message}</span>
                 </label>

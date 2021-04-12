@@ -1,3 +1,4 @@
+import { Field, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
 import SwitchComponent from '../components/common/SwitchComponent';
@@ -37,16 +38,11 @@ export default function basicInfoPage(): JSX.Element {
     },
   ];
   const relatedSwitch = 'weightMeasureUnit';
-
   const [switchObjArr, setSwitchObjArr] = useState(defaultSwitchObjArr);
 
-  const [name, setName] = useState('');
-  const [weight, setWeight] = useState(null);
   const [weightMeasureUnit, setWeightMeasureUnit] = useState('lb');
 
   const {
-    nameObj,
-    weightObj,
     validateName,
     validateWeight,
   } = useContext(ValidationsContext);
@@ -58,109 +54,103 @@ export default function basicInfoPage(): JSX.Element {
     setSwitchObjArr(newSwitchObjArr);
   };
 
-  const handleField = (e) => {
-    const fieldName = e.target.name;
-    const fieldValue = e.target.value;
-
-    if (fieldName === 'name') {
-      setName(fieldValue);
-      validateName(fieldValue);
-    }
-    if (fieldName === 'weight') {
-      const valueToNumber = Number(fieldValue);
-
-      if (valueToNumber < 0) {
-        const fixedValue = valueToNumber * -1;
-
-        setWeight(fixedValue);
-        validateWeight(fixedValue);
-      } else {
-        setWeight(valueToNumber);
-        validateWeight(valueToNumber);
-      }
-    }
+  const onSubmit = ({ name, weight }) => {
+    const submitBasicInfoObj = {
+      email: loggedUser.email,
+      name,
+      weight: Number(weight),
+      weightMeasureUnit,
+    };
+    submitBasicInfo(submitBasicInfoObj);
+    router.push('/water-accountant');
   };
 
-  const handleSubmitBasicInfo = () => {
-    validateName(name);
-    validateWeight(weight);
+  const validate = ({ name, weight }) => {
+    const errors = {
+      name: null,
+      weight: null,
+    };
 
-    if (nameObj.isValid && weightObj.isValid) {
-      const submitBasicInfoObj = {
-        email: loggedUser.email,
-        name,
-        weight,
-        weightMeasureUnit,
-      };
-      submitBasicInfo(submitBasicInfoObj);
-      router.push('/water-accountant');
-    }
+    errors.name = validateName(name);
+
+    const weightToNumber = Number(weight);
+    errors.weight = validateWeight(weightToNumber);
+
+    if (!errors.name) { delete errors.name; }
+    if (!errors.weight) { delete errors.weight; }
+
+    return errors;
   };
 
   return (
     <section className={`${styles.basicInfoContainer} wrapper wrapper--fullHeight wrapper--greyBg`}>
       <p className="title">Hello! You’ll be experiencing the Water Accountant. You must insert your name and weight.</p>
 
-      <form className="form">
-        <label
-          htmlFor="name"
-          // i'm comapring (isValid === false) because the initial value is null...
-          // And it can become false only after validated...
-          // I only want to have the error class after validated.
-          className={`label ${(nameObj.isValid === false) && 'label--error'}`}
-        >
-          <span className="label__text">Name</span>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            className="input"
-            value={name}
-            onChange={(e) => handleField(e)}
-          />
-          <span className="tooltip">{nameObj.message}</span>
-        </label>
-
-        <div className="inputGroup">
-          <label
-            htmlFor="weight"
-            // i'm comapring (isValid === false) because the initial value is null...
-            // And it can become false only after validated...
-            // I only want to have the error class after validated.
-            className={`label ${(weightObj.isValid === false) && 'label--error'}`}
+      <Formik
+        onSubmit={onSubmit}
+        initialValues={{
+          name: '',
+          weight: '',
+        }}
+        validate={validate}
+      >
+        {({
+          handleSubmit, errors, touched,
+        }) => (
+          <form
+            className="form"
+            onSubmit={handleSubmit}
           >
-            <span className="label__text">Weight</span>
+            <label
+              htmlFor="name"
+              className={`label ${(touched.name && errors.name) && 'label--error'}`}
+            >
+              <span className="label__text">Name</span>
+              <Field
+                type="text"
+                name="name"
+                id="name"
+                className="input"
+              />
+              <span className="tooltip">{errors.name}</span>
+            </label>
+
+            <div className="inputGroup">
+              <label
+                htmlFor="weight"
+                className={`label ${(touched.weight && errors.weight) && 'label--error'}`}
+              >
+                <span className="label__text">Weight</span>
+                <Field
+                  type="number"
+                  name="weight"
+                  id="weight"
+                  className="input"
+                />
+                <span className="tooltip">{errors.weight}</span>
+              </label>
+
+              <span
+                className="label"
+              >
+                <span className="label__text">Weight measure unit</span>
+                <SwitchComponent
+                  relatedSwitch={relatedSwitch}
+                  switchObjArr={switchObjArr}
+                  switchSubscriber={switchSubscriber}
+                />
+              </span>
+            </div>
+
             <input
-              type="number"
-              name="weight"
-              id="weight"
-              className="input"
-              value={weight || ''}
-              onChange={(e) => handleField(e)}
+              className="button"
+              type="submit"
+              value="Continue"
             />
-            <span className="tooltip">{weightObj.message}</span>
-          </label>
 
-          <span
-            className="label"
-          >
-            <span className="label__text">Weight measure unit</span>
-            <SwitchComponent
-              relatedSwitch={relatedSwitch}
-              switchObjArr={switchObjArr}
-              switchSubscriber={switchSubscriber}
-            />
-          </span>
-        </div>
-
-        <input
-          className="button"
-          type="button"
-          value="Continue"
-          onClick={handleSubmitBasicInfo}
-        />
-
-      </form>
+          </form>
+        )}
+      </Formik>
     </section>
   );
 }

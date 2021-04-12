@@ -177,7 +177,7 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
     return false;
   };
 
-  const validateName = async (name) => {
+  const validateName = (name) => {
     if (!name) {
       return 'No name was provided';
     }

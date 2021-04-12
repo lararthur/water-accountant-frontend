@@ -19,9 +19,6 @@ interface CustomValidationsType {
 }
 
 interface ValidationsContextData {
-  emailObj: defaultObjProperties;
-  passwordObj: defaultObjProperties;
-  confirmPasswordObj: defaultObjProperties;
   nameObj: defaultObjProperties;
   weightObj: defaultObjProperties;
   measureObj: defaultObjProperties;
@@ -32,7 +29,7 @@ interface ValidationsContextData {
   validateWeight: (weight) => void;
   validatePasswordEquality: (password, confirmPassword) => void;
   validateMeasure: (measure) => void;
-  resetValidations: () => void;
+  resetCustomValidations: () => void;
   setCustomErrorMessage: (name: string, message: string) => void;
 }
 
@@ -41,9 +38,6 @@ export const ValidationsContext = createContext({} as ValidationsContextData);
 export function ValidationsProvider({ children }: ValidationsProviderProps): JSX.Element {
   const defaultObj: defaultObjProperties = { isValid: null, message: null };
 
-  const [emailObj, setEmailObj] = useState(defaultObj);
-  const [passwordObj, setPasswordObj] = useState(defaultObj);
-  const [confirmPasswordObj, setConfirmPasswordObj] = useState(defaultObj);
   const [nameObj, setNameObj] = useState(defaultObj);
   const [weightObj, setWeightObj] = useState(defaultObj);
   const [measureObj, setMeasureObj] = useState(defaultObj);
@@ -58,7 +52,7 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
   };
   const [customValidations, setCustomValidations] = useState(defaultCustomValidations);
 
-  const resetValidations = () => {
+  const resetCustomValidations = () => {
     setCustomValidations(defaultCustomValidations);
   };
 
@@ -236,9 +230,6 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
 
   return (
     <ValidationsContext.Provider value={{
-      emailObj,
-      passwordObj,
-      confirmPasswordObj,
       nameObj,
       weightObj,
       measureObj,
@@ -249,7 +240,7 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
       validatePasswordEquality,
       validateMeasure,
       customValidations,
-      resetValidations,
+      resetCustomValidations,
       setCustomErrorMessage,
     }}
     >

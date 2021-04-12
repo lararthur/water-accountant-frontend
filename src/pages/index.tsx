@@ -30,14 +30,11 @@ const Home = (): JSX.Element => {
   const { loginUser, registerUser } = useContext(UsersContext);
 
   const {
-    emailObj,
-    passwordObj,
-    confirmPasswordObj,
     validateEmail,
     validatePassword,
     validatePasswordEquality,
     customValidations,
-    resetValidations,
+    resetCustomValidations,
   } = useContext(ValidationsContext);
 
   const defaultSwitchObjArr: switchObjArrType = [
@@ -58,10 +55,10 @@ const Home = (): JSX.Element => {
     setSwitchObjArr(newSwitchObjArr);
     handleReset();
     // will need to do some cleanup for the fomik state!
-    resetValidations();
+    resetCustomValidations();
   };
 
-  const onSubmit = ({ email, password }, actions) => {
+  const onSubmit = ({ email, password }) => {
     if (switchObjArr[0].checked) {
       loginUser({ email, password });
     } else {
@@ -70,7 +67,7 @@ const Home = (): JSX.Element => {
   };
 
   const validate = (values) => {
-    resetValidations();
+    resetCustomValidations();
 
     const errors = {
       email: null,

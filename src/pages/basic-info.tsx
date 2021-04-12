@@ -43,7 +43,6 @@ export default function basicInfoPage(): JSX.Element {
   const [name, setName] = useState('');
   const [weight, setWeight] = useState(null);
   const [weightMeasureUnit, setWeightMeasureUnit] = useState('lb');
-  const [language, setLanguage] = useState('en-US');
 
   const {
     nameObj,
@@ -80,9 +79,6 @@ export default function basicInfoPage(): JSX.Element {
         validateWeight(valueToNumber);
       }
     }
-    if (fieldName === 'language') {
-      setLanguage(fieldValue);
-    }
   };
 
   const handleSubmitBasicInfo = () => {
@@ -95,7 +91,6 @@ export default function basicInfoPage(): JSX.Element {
         name,
         weight,
         weightMeasureUnit,
-        language,
       };
       submitBasicInfo(submitBasicInfoObj);
       router.push('/water-accountant');
@@ -104,7 +99,7 @@ export default function basicInfoPage(): JSX.Element {
 
   return (
     <section className={`${styles.basicInfoContainer} wrapper wrapper--fullHeight wrapper--greyBg`}>
-      <p className="title">Hello! You’ll be experiencing the Water Accountant. You must insert your name, weight and language.</p>
+      <p className="title">Hello! You’ll be experiencing the Water Accountant. You must insert your name and weight.</p>
 
       <form className="form">
         <label
@@ -157,22 +152,6 @@ export default function basicInfoPage(): JSX.Element {
             />
           </span>
         </div>
-
-        <label
-          htmlFor="language"
-          className="label"
-        >
-          <span className="label__text">Language</span>
-          <select
-            name="language"
-            id="language"
-            className="input"
-            onChange={(e) => handleField(e)}
-          >
-            <option value="en-US">English</option>
-            <option value="pt-BR">Português</option>
-          </select>
-        </label>
 
         <input
           className="button"

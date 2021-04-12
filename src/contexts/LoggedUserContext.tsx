@@ -14,7 +14,6 @@ interface User {
   name: string | null;
   weight: number | null;
   weightMeasureUnit: 'kg' | 'lb' | null;
-  language: 'pt-BR' | 'en-US' | null;
   recipients: Recipient[] | null;
 }
 

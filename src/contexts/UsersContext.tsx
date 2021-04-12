@@ -26,7 +26,6 @@ interface User {
   name: string | null;
   weight: number | null;
   weightMeasureUnit: 'kg' | 'lb' | null;
-  language: 'pt-BR' | 'en-US' | null;
   recipients: Recipient[] | null;
 }
 
@@ -70,7 +69,6 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
       name: null,
       weight: null,
       weightMeasureUnit: null,
-      language: null,
       recipients: null,
     };
 
@@ -97,13 +95,13 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
   };
 
   const submitBasicInfo = ({
-    email, name, weight, weightMeasureUnit, language,
+    email, name, weight, weightMeasureUnit,
   }) => {
     const user = users.find((item) => item.email === email);
     const otherUsers = users.filter((item) => item.email !== email);
 
     const userWithBasicInfo = {
-      ...user, name, weight, weightMeasureUnit, language,
+      ...user, name, weight, weightMeasureUnit,
     };
 
     const newUsers = [...otherUsers, userWithBasicInfo];

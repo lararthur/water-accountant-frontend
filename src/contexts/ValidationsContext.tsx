@@ -9,6 +9,15 @@ interface defaultObjProperties {
   message: string | null;
 }
 
+interface CustomValidationsType {
+  email: string | null;
+  password: string | null;
+  confirmPassword: string | null;
+  name: string | null;
+  weight: string | null;
+  measure: string | null;
+}
+
 interface ValidationsContextData {
   emailObj: defaultObjProperties;
   passwordObj: defaultObjProperties;
@@ -16,6 +25,7 @@ interface ValidationsContextData {
   nameObj: defaultObjProperties;
   weightObj: defaultObjProperties;
   measureObj: defaultObjProperties;
+  customValidations: CustomValidationsType;
   validateEmail: (email) => void;
   validatePassword: (password) => void;
   validateName: (name) => void;
@@ -38,20 +48,26 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
   const [weightObj, setWeightObj] = useState(defaultObj);
   const [measureObj, setMeasureObj] = useState(defaultObj);
 
+  const defaultCustomValidations = {
+    email: null,
+    password: null,
+    confirmPassword: null,
+    name: null,
+    weight: null,
+    measure: null,
+  };
+  const [customValidations, setCustomValidations] = useState(defaultCustomValidations);
+
   const resetValidations = () => {
-    setEmailObj(defaultObj);
-    setPasswordObj(defaultObj);
-    setConfirmPasswordObj(defaultObj);
-    setNameObj(defaultObj);
-    setWeightObj(defaultObj);
+    setCustomValidations(defaultCustomValidations);
   };
 
   const setCustomErrorMessage = (name, message) => {
-    if (name === 'email') setEmailObj({ isValid: false, message });
-    if (name === 'password') setPasswordObj({ isValid: false, message });
-    if (name === 'confirmPassword') setConfirmPasswordObj({ isValid: false, message });
-    if (name === 'name') setNameObj({ isValid: false, message });
-    if (name === 'weight') setWeightObj({ isValid: false, message });
+    const newCustomValidations = {
+      ...customValidations,
+      [name]: message,
+    };
+    setCustomValidations(newCustomValidations);
   };
 
   /* const validateEmail = (email) => {
@@ -232,6 +248,7 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
       validateWeight,
       validatePasswordEquality,
       validateMeasure,
+      customValidations,
       resetValidations,
       setCustomErrorMessage,
     }}

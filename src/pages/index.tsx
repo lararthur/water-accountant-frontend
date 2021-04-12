@@ -27,6 +27,8 @@ const Home = (): JSX.Element => {
     router.push('/water-accountant');
   }
 
+  const { loginUser, registerUser } = useContext(UsersContext);
+
   const {
     emailObj,
     passwordObj,
@@ -34,6 +36,7 @@ const Home = (): JSX.Element => {
     validateEmail,
     validatePassword,
     validatePasswordEquality,
+    customValidations,
     resetValidations,
   } = useContext(ValidationsContext);
 
@@ -58,11 +61,17 @@ const Home = (): JSX.Element => {
     resetValidations();
   };
 
-  const onSubmit = (values, actions) => {
-    console.log('Submit', values);
+  const onSubmit = ({ email, password }, actions) => {
+    if (switchObjArr[0].checked) {
+      loginUser({ email, password });
+    } else {
+      registerUser({ email, password });
+    }
   };
 
   const validate = (values) => {
+    resetValidations();
+
     const errors = {
       email: null,
       password: null,
@@ -124,7 +133,7 @@ const Home = (): JSX.Element => {
               <>
                 <label
                   htmlFor="email"
-                  className={`label ${(touched.email && errors.email) && 'label--error'}`}
+                  className={`label ${((touched.email && errors.email) || customValidations.email) && 'label--error'}`}
                 >
                   <span className="label__text">E-mail</span>
                   <Field
@@ -133,12 +142,12 @@ const Home = (): JSX.Element => {
                     id="email"
                     className="input"
                   />
-                  <span className="tooltip">{errors.email}</span>
+                  <span className="tooltip">{errors.email || customValidations.email}</span>
                 </label>
 
                 <label
                   htmlFor="password"
-                  className={`label ${(touched.password && errors.password) && 'label--error'}`}
+                  className={`label ${((touched.password && errors.password) || customValidations.password) && 'label--error'}`}
                 >
                   <span className="label__text">Password</span>
                   <Field
@@ -147,14 +156,14 @@ const Home = (): JSX.Element => {
                     id="password"
                     className="input"
                   />
-                  <span className="tooltip">{errors.password}</span>
+                  <span className="tooltip">{errors.password || customValidations.password}</span>
                 </label>
               </>
             ) : (
               <>
                 <label
                   htmlFor="email"
-                  className={`label ${(touched.email && errors.email) && 'label--error'}`}
+                  className={`label ${((touched.email && errors.email) || customValidations.email) && 'label--error'}`}
                 >
                   <span className="label__text">E-mail</span>
                   <Field
@@ -163,12 +172,12 @@ const Home = (): JSX.Element => {
                     id="email"
                     className="input"
                   />
-                  <span className="tooltip">{errors.email}</span>
+                  <span className="tooltip">{errors.email || customValidations.email}</span>
                 </label>
 
                 <label
                   htmlFor="password"
-                  className={`label ${(touched.password && errors.password) && 'label--error'}`}
+                  className={`label ${((touched.password && errors.password) || customValidations.password) && 'label--error'}`}
                 >
                   <span className="label__text">Password</span>
                   <Field
@@ -177,12 +186,12 @@ const Home = (): JSX.Element => {
                     id="password"
                     className="input"
                   />
-                  <span className="tooltip">{errors.password}</span>
+                  <span className="tooltip">{errors.password || customValidations.password}</span>
                 </label>
 
                 <label
                   htmlFor="confirm-password"
-                  className={`label ${(touched.confirmPassword && errors.confirmPassword) && 'label--error'}`}
+                  className={`label ${((touched.confirmPassword && errors.confirmPassword) || customValidations.confirmPassword) && 'label--error'}`}
                 >
                   <span className="label__text">Confirm Password</span>
                   <Field
@@ -191,7 +200,7 @@ const Home = (): JSX.Element => {
                     id="confirm-password"
                     className="input"
                   />
-                  <span className="tooltip">{errors.confirmPassword}</span>
+                  <span className="tooltip">{errors.confirmPassword || customValidations.confirmPassword}</span>
                 </label>
               </>
             )}

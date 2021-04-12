@@ -1,3 +1,4 @@
+import { Field, Formik } from 'formik';
 import React, { useContext, useEffect, useState } from 'react';
 import MenuComponent from '../components/common/MenuComponent';
 import SwitchComponent from '../components/common/SwitchComponent';
@@ -70,9 +71,6 @@ export default function WaterRecipient(): JSX.Element {
     setDrinkNowSwitchObjArr(newSwitchObjArr);
   };
 
-  const [measure, setMeasure] = useState(null);
-  const [recipientName, setRecipientName] = useState('');
-
   const [submitButtonValue, setSubmitButtonValue] = useState('Save');
 
   useEffect(() => {
@@ -89,34 +87,26 @@ export default function WaterRecipient(): JSX.Element {
     }
   }, [addToShortcutSwitchObjArr, drinkNowSwitchObjArr]);
 
-  const { measureObj, validateMeasure } = useContext(ValidationsContext);
+  const { validateMeasure } = useContext(ValidationsContext);
 
-  const handleField = (e) => {
-    const fieldName = e.target.name;
-    const fieldValue = e.target.value;
-
-    if (fieldName === 'measure') {
-      const valueToNumber = Number(fieldValue);
-
-      if (valueToNumber < 0) {
-        const fixedValue = valueToNumber * -1;
-        setMeasure(fixedValue);
-        validateMeasure(fixedValue);
-        return;
-      }
-      setMeasure(valueToNumber);
-      validateMeasure(valueToNumber);
-    }
-    if (fieldName === 'recipientName') {
-      setRecipientName(fieldValue);
-    }
-  };
-
-  const handleSubmitRecipient = () => {
+  const onSubmit = ({ measure, recipientName }) => {
     /*
     @TODO:
     -> submit the form to save the changes (validate before!!!).
     */
+  };
+
+  const validate = ({ measure }) => {
+    const errors = {
+      measure: null,
+    };
+
+    const measureToNumber = Number(measure);
+    errors.measure = validateMeasure(measureToNumber);
+
+    if (!errors.measure) { delete errors.measure; }
+
+    return errors;
   };
 
   return (
@@ -124,91 +114,103 @@ export default function WaterRecipient(): JSX.Element {
       <MenuComponent />
       <p className="title">Add/Edit Water Recipient</p>
 
-      <form className="form">
-
-        <label
-          htmlFor="measure"
-          // i'm comapring (isValid === false) because the initial value is null...
-          // And it can become false only after validated...
-          // I only want to have the error class after validated.
-          className={`label ${(measureObj.isValid === false) && 'label--error'}`}
-        >
-          <span className="label__text">Measure</span>
-          <input
-            type="number"
-            name="measure"
-            id="measure"
-            className="input"
-            value={measure || ''}
-            onChange={(e) => handleField(e)}
-          />
-          <span className="tooltip">{measureObj.message}</span>
-        </label>
-
-        <div className="inputGroup">
-          <span
-            className="label"
+      <Formik
+        onSubmit={onSubmit}
+        initialValues={{
+          measure: '',
+          recipientName: '',
+        }}
+        validate={validate}
+      >
+        {({
+          handleSubmit, errors, touched,
+        }) => (
+          <form
+            className="form"
+            onSubmit={handleSubmit}
           >
-            <span className="label__text">Add to shortcut?</span>
-            <SwitchComponent
-              relatedSwitch="shortcutSwitch"
-              switchObjArr={addToShortcutSwitchObjArr}
-              switchSubscriber={addToShortcutSwitchSubscriber}
-            />
-          </span>
-        </div>
 
-        {addToShortcutSwitchObjArr[0].checked && ([
-          <div className="inputGroup" key="recipientTypeSwitch">
-            <span
-              className="label"
+            <label
+              htmlFor="measure"
+              className={`label ${(touched.measure && errors.measure) && 'label--error'}`}
             >
-              <span className="label__text">Recipient type</span>
-              <SwitchComponent
-                relatedSwitch="recipientTypeSwitch"
-                switchObjArr={recipientTypeSwitchObjArr}
-                switchSubscriber={recipientTypeSwitchSubscriber}
+              <span className="label__text">Measure</span>
+              <Field
+                type="number"
+                name="measure"
+                id="measure"
+                className="input"
               />
-            </span>
-          </div>,
+              <span className="tooltip">{errors.measure}</span>
+            </label>
 
-          <div className="inputGroup" key="drinkNowSwitchObjArr">
-            <span
-              className="label"
-            >
-              <span className="label__text">Drink right now?</span>
-              <SwitchComponent
-                relatedSwitch="drinkNowSwitch"
-                switchObjArr={drinkNowSwitchObjArr}
-                switchSubscriber={drinkNowSwitchSubscriber}
-              />
-            </span>
-          </div>,
+            <div className="inputGroup">
+              <span
+                className="label"
+              >
+                <span className="label__text">Add to shortcut?</span>
+                <SwitchComponent
+                  relatedSwitch="shortcutSwitch"
+                  switchObjArr={addToShortcutSwitchObjArr}
+                  switchSubscriber={addToShortcutSwitchSubscriber}
+                />
+              </span>
+            </div>
 
-          <label
-            htmlFor="recipientName"
-            className="label"
-            key="recipientName"
-          >
-            <span className="label__text">Recipient name (optional)</span>
+            {addToShortcutSwitchObjArr[0].checked && ([
+              <div className="inputGroup" key="recipientTypeSwitch">
+                <span
+                  className="label"
+                >
+                  <span className="label__text">Recipient type</span>
+                  <SwitchComponent
+                    relatedSwitch="recipientTypeSwitch"
+                    switchObjArr={recipientTypeSwitchObjArr}
+                    switchSubscriber={recipientTypeSwitchSubscriber}
+                  />
+                </span>
+              </div>,
+
+              <div className="inputGroup" key="drinkNowSwitchObjArr">
+                <span
+                  className="label"
+                >
+                  <span className="label__text">Drink right now?</span>
+                  <SwitchComponent
+                    relatedSwitch="drinkNowSwitch"
+                    switchObjArr={drinkNowSwitchObjArr}
+                    switchSubscriber={drinkNowSwitchSubscriber}
+                  />
+                </span>
+              </div>,
+
+              // unfortunatelly i had to add this ignore line below to avoid the...
+              // ...warning of form-control stuff. I didn`t understand...
+              // ...where i`m getting this wrong :(
+              // eslint-disable-next-line jsx-a11y/label-has-associated-control
+              <label
+                htmlFor="recipientName"
+                className="label"
+                key="recipientName"
+              >
+                <span className="label__text">Recipient name (optional)</span>
+                <Field
+                  type="text"
+                  name="recipientName"
+                  id="recipientName"
+                  className="input"
+                />
+              </label>,
+            ])}
+
             <input
-              type="text"
-              name="recipientName"
-              id="recipientName"
-              className="input"
-              value={recipientName}
-              onChange={(e) => handleField(e)}
+              className="button"
+              type="submit"
+              value={submitButtonValue}
             />
-          </label>,
-        ])}
-
-        <input
-          className="button"
-          type="button"
-          value={submitButtonValue}
-          onClick={handleSubmitRecipient}
-        />
-      </form>
+          </form>
+        )}
+      </Formik>
 
     </section>
   );

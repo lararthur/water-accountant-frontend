@@ -1,7 +1,9 @@
 import { Field, Formik } from 'formik';
+import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from 'react';
 import MenuComponent from '../components/common/MenuComponent';
 import SwitchComponent from '../components/common/SwitchComponent';
+import { LoggedUserContext } from '../contexts/LoggedUserContext';
 import { ValidationsContext } from '../contexts/ValidationsContext';
 import styles from '../styles/water-recipient.module.scss';
 
@@ -17,6 +19,13 @@ type switchObjArrType = [
 ];
 
 export default function WaterRecipient(): JSX.Element {
+  const { loggedUser } = useContext(LoggedUserContext);
+  const router = useRouter();
+
+  if (process.browser && !loggedUser) {
+    router.push('/');
+  }
+
   const defaultRecipientTypeSwitchObjArr: switchObjArrType = [
     {
       identifier: 'Glass',

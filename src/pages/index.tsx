@@ -97,12 +97,6 @@ const Home = (): JSX.Element => {
         Accountant
       </h1>
 
-      {/*
-        @TODO:
-        -> in the future, leave only the validatioons functions on the...
-        -> ...Validations context. And probably it won`t be a context anymore.
-      */}
-
       <Formik
         onSubmit={onSubmit}
         initialValues={{

@@ -4,25 +4,8 @@ interface ValidationsProviderProps {
   children: ReactNode;
 }
 
-interface defaultObjProperties {
-  isValid: boolean | null;
-  message: string | null;
-}
-
-interface CustomValidationsType {
-  email: string | null;
-  password: string | null;
-  confirmPassword: string | null;
-  name: string | null;
-  weight: string | null;
-  measure: string | null;
-}
-
 interface ValidationsContextData {
-  nameObj: defaultObjProperties;
-  weightObj: defaultObjProperties;
-  measureObj: defaultObjProperties;
-  customValidations: CustomValidationsType;
+  customValidations;
   validateEmail: (email) => void;
   validatePassword: (password) => void;
   validateName: (name) => void;
@@ -36,24 +19,10 @@ interface ValidationsContextData {
 export const ValidationsContext = createContext({} as ValidationsContextData);
 
 export function ValidationsProvider({ children }: ValidationsProviderProps): JSX.Element {
-  const defaultObj: defaultObjProperties = { isValid: null, message: null };
-
-  const [nameObj, setNameObj] = useState(defaultObj);
-  const [weightObj, setWeightObj] = useState(defaultObj);
-  const [measureObj, setMeasureObj] = useState(defaultObj);
-
-  const defaultCustomValidations = {
-    email: null,
-    password: null,
-    confirmPassword: null,
-    name: null,
-    weight: null,
-    measure: null,
-  };
-  const [customValidations, setCustomValidations] = useState(defaultCustomValidations);
+  const [customValidations, setCustomValidations] = useState({});
 
   const resetCustomValidations = () => {
-    setCustomValidations(defaultCustomValidations);
+    setCustomValidations({});
   };
 
   const setCustomErrorMessage = (name, message) => {
@@ -63,40 +32,6 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
     };
     setCustomValidations(newCustomValidations);
   };
-
-  /* const validateEmail = (email) => {
-    if (!email) {
-      const newEmailObj = {
-        isValid: false,
-        message: 'No e-mail was provided',
-      };
-      setEmailObj(newEmailObj);
-      return;
-    }
-
-    if (typeof email !== 'string') {
-      const newEmailObj = {
-        isValid: false,
-        message: 'No e-mail was provided',
-      };
-      setEmailObj(newEmailObj);
-      return;
-    }
-
-    const emailRegexp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const emailIsValid = emailRegexp.test(email);
-
-    if (!emailIsValid) {
-      const newEmailObj = {
-        isValid: false,
-        message: 'Invalid user e-mail',
-      };
-      setEmailObj(newEmailObj);
-      return;
-    }
-
-    setEmailObj({ isValid: true, message: null });
-  }; */
 
   const validateEmail = (email) => {
     if (!email) {
@@ -230,9 +165,6 @@ export function ValidationsProvider({ children }: ValidationsProviderProps): JSX
 
   return (
     <ValidationsContext.Provider value={{
-      nameObj,
-      weightObj,
-      measureObj,
       validateEmail,
       validatePassword,
       validateName,

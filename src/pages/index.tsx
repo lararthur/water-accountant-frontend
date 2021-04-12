@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import SwitchComponent from '../components/common/SwitchComponent';
 import styles from '../styles/home.module.scss';
 import { UsersContext } from '../contexts/UsersContext';
@@ -71,7 +71,11 @@ const Home = (): JSX.Element => {
 
     errors.email = validateEmail(values.email);
     errors.password = validatePassword(values.password);
-    errors.confirmPassword = validatePasswordEquality(values.password, values.confirmPassword);
+
+    // checking if register swtitch is selected
+    if (!switchObjArr[0].checked) {
+      errors.confirmPassword = validatePasswordEquality(values.password, values.confirmPassword);
+    }
 
     if (!errors.email) { delete errors.email; }
     if (!errors.password) { delete errors.password; }
@@ -89,7 +93,6 @@ const Home = (): JSX.Element => {
 
       {/*
         @TODO:
-        -> show field error only if it has been touched
         -> in the future, leave only the validatioons functions on the...
         -> ...Validations context. And probably it won`t be a context anymore.
       */}
@@ -104,7 +107,7 @@ const Home = (): JSX.Element => {
         validate={validate}
       >
         {({
-          values, handleChange, handleSubmit, handleReset, errors,
+          handleSubmit, handleReset, errors, touched,
         }) => (
           <form
             className="form"
@@ -121,32 +124,28 @@ const Home = (): JSX.Element => {
               <>
                 <label
                   htmlFor="email"
-                  className={`label ${errors.email && 'label--error'}`}
+                  className={`label ${(touched.email && errors.email) && 'label--error'}`}
                 >
                   <span className="label__text">E-mail</span>
-                  <input
+                  <Field
                     type="email"
                     name="email"
                     id="email"
                     className="input"
-                    value={values.email}
-                    onChange={handleChange}
                   />
                   <span className="tooltip">{errors.email}</span>
                 </label>
 
                 <label
                   htmlFor="password"
-                  className={`label ${errors.password && 'label--error'}`}
+                  className={`label ${(touched.password && errors.password) && 'label--error'}`}
                 >
                   <span className="label__text">Password</span>
-                  <input
+                  <Field
                     type="password"
                     name="password"
                     id="password"
                     className="input"
-                    value={values.password}
-                    onChange={handleChange}
                   />
                   <span className="tooltip">{errors.password}</span>
                 </label>
@@ -155,48 +154,42 @@ const Home = (): JSX.Element => {
               <>
                 <label
                   htmlFor="email"
-                  className={`label ${errors.email && 'label--error'}`}
+                  className={`label ${(touched.email && errors.email) && 'label--error'}`}
                 >
                   <span className="label__text">E-mail</span>
-                  <input
+                  <Field
                     type="email"
                     name="email"
                     id="email"
                     className="input"
-                    value={values.email}
-                    onChange={handleChange}
                   />
                   <span className="tooltip">{errors.email}</span>
                 </label>
 
                 <label
                   htmlFor="password"
-                  className={`label ${errors.password && 'label--error'}`}
+                  className={`label ${(touched.password && errors.password) && 'label--error'}`}
                 >
                   <span className="label__text">Password</span>
-                  <input
+                  <Field
                     type="password"
                     name="password"
                     id="password"
                     className="input"
-                    value={values.password}
-                    onChange={handleChange}
                   />
                   <span className="tooltip">{errors.password}</span>
                 </label>
 
                 <label
                   htmlFor="confirm-password"
-                  className={`label ${errors.confirmPassword && 'label--error'}`}
+                  className={`label ${(touched.confirmPassword && errors.confirmPassword) && 'label--error'}`}
                 >
                   <span className="label__text">Confirm Password</span>
-                  <input
+                  <Field
                     type="password"
                     name="confirmPassword"
                     id="confirm-password"
                     className="input"
-                    value={values.confirmPassword}
-                    onChange={handleChange}
                   />
                   <span className="tooltip">{errors.confirmPassword}</span>
                 </label>

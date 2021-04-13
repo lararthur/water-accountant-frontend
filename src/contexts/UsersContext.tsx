@@ -34,7 +34,7 @@ interface User {
   weight: number | null;
   weightMeasureUnit: 'kg' | 'lb' | null;
   recipients: Recipient[] | null;
-  dailyProgress: DailyProgress;
+  dailyProgress: DailyProgress | null;
 }
 
 interface UsersContextData {
@@ -63,11 +63,14 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
 
   const getUser = (email) => users.find((user) => user.email === email);
 
-  const defaultDailyProgress = {
-    necessary: null,
-    drank: null,
-    percentage: 0,
-    date: new Date(),
+  const calculateInitialDailyProgress = (weight) => {
+    const initialDailyProgress = {
+      necessary: weight * 35,
+      drank: null,
+      date: new Date(),
+    };
+
+    return initialDailyProgress;
   };
 
   const registerUser = ({ email, password }) => {
@@ -86,7 +89,7 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
       weight: null,
       weightMeasureUnit: null,
       recipients: null,
-      dailyProgress: defaultDailyProgress,
+      dailyProgress: null,
     };
 
     const newUsers = [...users, newUser];
@@ -118,7 +121,11 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
     const otherUsers = users.filter((item) => item.email !== email);
 
     const userWithBasicInfo = {
-      ...user, name, weight, weightMeasureUnit,
+      ...user,
+      name,
+      weight,
+      weightMeasureUnit,
+      dailyProgress: calculateInitialDailyProgress(weight),
     };
 
     const newUsers = [...otherUsers, userWithBasicInfo];
@@ -133,7 +140,7 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
     const otherUsers = users.filter((item) => item.email !== email);
 
     const userWithDefaultDailyProgress = {
-      ...user, dailyProgress: defaultDailyProgress,
+      ...user, dailyProgress: calculateInitialDailyProgress(user.weight),
     };
 
     const newUsers = [...otherUsers, userWithDefaultDailyProgress];

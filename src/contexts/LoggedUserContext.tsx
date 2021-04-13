@@ -14,6 +14,12 @@ interface Recipient {
   type: 'glass' | 'bottle';
 }
 
+interface DailyProgress {
+  necessary: number | null;
+  drank: number | null;
+  date: Date;
+}
+
 interface User {
   email: string;
   password: string;
@@ -21,6 +27,7 @@ interface User {
   weight: number | null;
   weightMeasureUnit: 'kg' | 'lb' | null;
   recipients: Recipient[] | null;
+  dailyProgress: DailyProgress | null;
 }
 
 interface LoggedUserContextData {
@@ -50,7 +57,7 @@ export function LoggedUserProvider({ children }: LoggedUserProvider): JSX.Elemen
 
   // the code below verifies if it is a different day...
   // ...if it is, the data of water drank will reset.
-  if (loggedUser) {
+  if (loggedUser && loggedUser.weight) {
     const lastDate = new Date(loggedUser.dailyProgress.date);
     const currentDate = new Date();
 

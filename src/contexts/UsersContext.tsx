@@ -17,7 +17,7 @@ interface Recipient {
   id: number | null;
   name: string;
   measure: number;
-  type: 'glass' | 'bottle';
+  type: string;
 }
 
 interface User {

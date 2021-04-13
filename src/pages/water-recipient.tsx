@@ -101,11 +101,22 @@ export default function WaterRecipient(): JSX.Element {
 
   const { addRecipient } = useContext(UsersContext);
 
-  const onSubmit = ({ measure, recipientName }) => {
+  const saveRecipient = ({ measure, recipientName }) => {
+    const type = recipientTypeSwitchObjArr.find((item) => item.checked);
+
+    const recipient = {
+      id: null,
+      name: recipientName || type.identifier,
+      measure: Number(measure),
+      type: type.identifier.toLowerCase(),
+    };
+    addRecipient(recipient);
+  };
+
+  const onSubmit = (values) => {
     /*
     @TODO:
     -> use drink function (will be implemented at UsersContext)
-    -> implement saveRecipient function to abstract code.
     */
 
     // only drink
@@ -115,22 +126,13 @@ export default function WaterRecipient(): JSX.Element {
     }
     // only save recipient to shortcut
     if (addToShortcutSwitchObjArr[0].checked && !drinkNowSwitchObjArr[0].checked) {
-      // abstract this code to a saveRecipient function
-      const type = recipientTypeSwitchObjArr.find((item) => item.checked);
-
-      const recipient = {
-        id: null,
-        name: recipientName || type.identifier,
-        measure: Number(measure),
-        type: type.identifier.toLowerCase(),
-      };
-      addRecipient(recipient);
+      saveRecipient(values);
       router.push('/water-accountant');
       return;
     }
     // save recipient to shorcut AND drink
     if (addToShortcutSwitchObjArr[0].checked && drinkNowSwitchObjArr[0].checked) {
-      // call drink and save functions
+      // call drink and saveRecipient functions
     }
   };
 

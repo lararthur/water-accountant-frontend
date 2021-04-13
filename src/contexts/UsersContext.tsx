@@ -20,6 +20,13 @@ interface Recipient {
   type: string;
 }
 
+interface DailyProgress {
+  necessary: number | null;
+  drank: number | null;
+  percentage: number;
+  date: Date;
+}
+
 interface User {
   email: string;
   password: string;
@@ -27,6 +34,7 @@ interface User {
   weight: number | null;
   weightMeasureUnit: 'kg' | 'lb' | null;
   recipients: Recipient[] | null;
+  dailyProgress: DailyProgress;
 }
 
 interface UsersContextData {
@@ -35,6 +43,7 @@ interface UsersContextData {
   loginUser: (param: UserParams) => void;
   submitBasicInfo: (obj) => void;
   addRecipient: (recipient: Recipient) => void;
+  resetDailyProgress: (email: string) => void;
 }
 
 interface UsersProviderProps {
@@ -54,6 +63,13 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
 
   const getUser = (email) => users.find((user) => user.email === email);
 
+  const defaultDailyProgress = {
+    necessary: null,
+    drank: null,
+    percentage: 0,
+    date: new Date(),
+  };
+
   const registerUser = ({ email, password }) => {
     // validate if email already exists
     const userExists = getUser(email);
@@ -70,6 +86,7 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
       weight: null,
       weightMeasureUnit: null,
       recipients: null,
+      dailyProgress: defaultDailyProgress,
     };
 
     const newUsers = [...users, newUser];
@@ -111,6 +128,21 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
     login(userWithBasicInfo);
   };
 
+  const resetDailyProgress = (email) => {
+    const user = users.find((item) => item.email === email);
+    const otherUsers = users.filter((item) => item.email !== email);
+
+    const userWithDefaultDailyProgress = {
+      ...user, dailyProgress: defaultDailyProgress,
+    };
+
+    const newUsers = [...otherUsers, userWithDefaultDailyProgress];
+
+    setUsers(newUsers);
+    Cookies.set('WaterAccountantUsers', JSON.stringify(newUsers));
+    login(userWithDefaultDailyProgress);
+  };
+
   const addRecipient = (recipient) => {
     const userRecipients = loggedUser.recipients || [];
     const newRecipient = recipient;
@@ -141,6 +173,7 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
       loginUser,
       submitBasicInfo,
       addRecipient,
+      resetDailyProgress,
     }}
     >
       {children}

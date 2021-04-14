@@ -5,6 +5,9 @@ import React, {
   useContext,
 } from 'react';
 import Cookies from 'js-cookie';
+import {
+  differenceInDays, getDate, getMonth, getYear,
+} from 'date-fns';
 import { LoggedUserContext } from './LoggedUserContext';
 import { ValidationsContext } from './ValidationsContext';
 
@@ -172,6 +175,33 @@ export function UsersProvider({ children }: UsersProviderProps): JSX.Element {
     Cookies.set('WaterAccountantUsers', JSON.stringify(newUsers));
     login(userWithRecipient);
   };
+
+  // the code below verifies if it is a different day...
+  // ...if it is, the data of water drank will reset.
+  if (loggedUser && loggedUser.weight) {
+    const lastDate = new Date(loggedUser.dailyProgress.date);
+    const currentDate = new Date();
+
+    const lastDateObj = {
+      day: getDate(lastDate),
+      month: getMonth(lastDate),
+      year: getYear(lastDate),
+    };
+    const currentDateObj = {
+      day: getDate(currentDate),
+      month: getMonth(currentDate),
+      year: getYear(currentDate),
+    };
+
+    const difference = differenceInDays(
+      new Date(lastDateObj.year, lastDateObj.month, lastDateObj.day),
+      new Date(currentDateObj.year, currentDateObj.month, currentDateObj.day),
+    );
+
+    if (difference !== 0) {
+      resetDailyProgress(loggedUser.email);
+    }
+  }
 
   return (
     <UsersContext.Provider value={{

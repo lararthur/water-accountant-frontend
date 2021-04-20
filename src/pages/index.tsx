@@ -1,11 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Formik, Field } from 'formik';
+import { GetServerSideProps } from 'next';
+import getLoggedUser from '../utils';
 import SwitchComponent from '../components/common/SwitchComponent';
 import styles from '../styles/home.module.scss';
 import { UsersContext } from '../contexts/UsersContext';
 import { ValidationsContext } from '../contexts/ValidationsContext';
-import { LoggedUserContext } from '../contexts/LoggedUserContext';
 
 type switchObjArrType = [
   {
@@ -18,10 +19,18 @@ type switchObjArrType = [
   },
 ];
 
-const Home = (): JSX.Element => {
-  const router = useRouter();
+/*
+  @TODO:
+  -> create a file only for types - on src/utils/types.ts
+  -> rename index.js file to functions.js
+*/
 
-  const { loggedUser } = useContext(LoggedUserContext);
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+  props: { loggedUser: getLoggedUser(context) }, // will be passed to the page component as props
+});
+
+const Home = ({ loggedUser }): JSX.Element => {
+  const router = useRouter();
 
   if (process.browser && loggedUser) {
     router.push('/water-accountant');

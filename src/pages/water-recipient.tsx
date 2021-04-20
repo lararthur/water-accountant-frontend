@@ -1,9 +1,10 @@
 import { Field, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import getLoggedUser from '../utils';
 import MenuComponent from '../components/common/MenuComponent';
 import SwitchComponent from '../components/common/SwitchComponent';
-import { LoggedUserContext } from '../contexts/LoggedUserContext';
 import { UsersContext } from '../contexts/UsersContext';
 import { ValidationsContext } from '../contexts/ValidationsContext';
 import styles from '../styles/water-recipient.module.scss';
@@ -19,8 +20,11 @@ type switchObjArrType = [
   },
 ];
 
-export default function WaterRecipient(): JSX.Element {
-  const { loggedUser } = useContext(LoggedUserContext);
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+  props: { loggedUser: getLoggedUser(context) }, // will be passed to the page component as props
+});
+
+export default function WaterRecipient({ loggedUser }): JSX.Element {
   const router = useRouter();
 
   if (process.browser && !loggedUser) {

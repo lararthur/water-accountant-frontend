@@ -1,8 +1,9 @@
 import { Field, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import getLoggedUser from '../utils';
 import SwitchComponent from '../components/common/SwitchComponent';
-import { LoggedUserContext } from '../contexts/LoggedUserContext';
 import { UsersContext } from '../contexts/UsersContext';
 import { ValidationsContext } from '../contexts/ValidationsContext';
 import styles from '../styles/basic-info.module.scss';
@@ -18,8 +19,11 @@ type switchObjArrType = [
   },
 ];
 
-export default function basicInfoPage(): JSX.Element {
-  const { loggedUser } = useContext(LoggedUserContext);
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+  props: { loggedUser: getLoggedUser(context) }, // will be passed to the page component as props
+});
+
+export default function basicInfoPage({ loggedUser }): JSX.Element {
   const router = useRouter();
 
   if (process.browser && !loggedUser) {

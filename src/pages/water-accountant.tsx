@@ -1,14 +1,18 @@
 import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
-import { setNestedObjectValues } from 'formik';
+import { GetServerSideProps } from 'next';
+import getLoggedUser from '../utils';
 import { LoggedUserContext } from '../contexts/LoggedUserContext';
 import styles from '../styles/water-accountant.module.scss';
 import MenuComponent from '../components/common/MenuComponent';
 import RecipientsComponent from '../components/pagesComponents/RecipientsComponent';
 
-export default function WaterAccountant(): JSX.Element {
+export const getServerSideProps: GetServerSideProps = async (context) => ({
+  props: { loggedUser: getLoggedUser(context) }, // will be passed to the page component as props
+});
+
+export default function WaterAccountant({ loggedUser }): JSX.Element {
   const router = useRouter();
-  const { loggedUser } = useContext(LoggedUserContext);
   if (process.browser && !loggedUser) {
     router.push('/');
   }

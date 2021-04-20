@@ -30,6 +30,7 @@ interface LoggedUserContextData {
   loggedUser: User | null;
   login: (user) => void;
   logout: () => void;
+  isLogged: boolean;
 }
 
 interface LoggedUserProvider {
@@ -48,14 +49,17 @@ export function LoggedUserProvider({ children }: LoggedUserProvider): JSX.Elemen
   -> maybe when chaged to some real DB, the these Cookies problems will stop
   */
   const [loggedUser, setLoggedUser] = useState(loggedUserFormated || null);
+  const [isLogged, setIsLogged] = useState(false);
 
   const login = (user) => {
     Cookies.set('LoggedUser', JSON.stringify(user));
+    setIsLogged(true);
     setLoggedUser(user);
   };
 
   const logout = () => {
     Cookies.remove('LoggedUser');
+    setIsLogged(false);
     setLoggedUser(null);
   };
 
@@ -64,6 +68,7 @@ export function LoggedUserProvider({ children }: LoggedUserProvider): JSX.Elemen
       loggedUser,
       login,
       logout,
+      isLogged,
     }}
     >
       {children}

@@ -7,6 +7,7 @@ import SwitchComponent from '../components/common/SwitchComponent';
 import styles from '../styles/home.module.scss';
 import { UsersContext } from '../contexts/UsersContext';
 import { ValidationsContext } from '../contexts/ValidationsContext';
+import { LoggedUserContext } from '../contexts/LoggedUserContext';
 
 type switchObjArrType = [
   {
@@ -32,7 +33,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => ({
 const Home = ({ loggedUser }): JSX.Element => {
   const router = useRouter();
 
-  if (process.browser && loggedUser) {
+  const { isLogged } = useContext(LoggedUserContext);
+
+  if (process.browser && isLogged) {
     router.push('/water-accountant');
   }
 

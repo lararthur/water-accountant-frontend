@@ -15,28 +15,24 @@ export default function WaterAccountant({ loggedUser }): JSX.Element {
   const router = useRouter();
   if (process.browser && !loggedUser) {
     router.push('/');
+    // in order to this early return work, take a look at the @TODO
+    return (<p>404</p>);
   }
   if (process.browser && loggedUser && !loggedUser.name) {
     router.push('/basic-info');
+    // in order to this early return work, take a look at the @TODO
+    return (<p>404</p>);
   }
 
   /*
   @TODO
   -> CHANGE THE COOKIES DATA TO FIREBASE OR REAL DB ASAP!!!...
   -> ...in order to fix the stuck progressBar, the 'did not mach Server x Browser' issue.
+  -> in order to a early return work, maybe it is necessary to implement : https://stackoverflow.com/questions/54938236/can-you-early-return-with-react-hooks#:~:text=React%20does%20not%20allow%20you,an%20accidental%20early%20return%20statement. ...
+  -> ...wich basically says that the the rest of the code must be componetized (or some of it).
    */
 
-  const defaultDailyProgress = {
-    necessary: 4000,
-    // the property down below is causing the progressBar to be stcuk in...
-    // ...the same position forever. look @TODO if you want to know how to fix it.
-    drank: 1700,
-  };
-
-  const [dailyProgress, setDailyProgress] = useState(
-    (loggedUser && loggedUser.dailyProgress)
-    || defaultDailyProgress,
-  );
+  const [dailyProgress, setDailyProgress] = useState(loggedUser);
 
   const [
     progressBarPercentage,
